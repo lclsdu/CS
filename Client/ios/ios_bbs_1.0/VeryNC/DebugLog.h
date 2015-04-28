@@ -1,0 +1,33 @@
+/*
+ *  DebugLog.h
+ *  DebugLog
+ *
+ *  Created by Karl Kraft on 3/22/09.
+ *  Copyright 2009 Karl Kraft. All rights reserved.
+ *
+ */
+
+ 
+//开关切换 在debug状态间切换
+
+//#define _DEBUG
+
+
+
+
+
+
+
+
+
+#ifdef _DEBUG
+
+#define DebugLog(args...) _DebugLog(__FILE__,__LINE__,__PRETTY_FUNCTION__,args);
+
+#else
+
+#define DebugLog(x...)
+
+#endif
+
+void _DebugLog(const char *file, int lineNumber, const char *funcName, NSString *format,...);

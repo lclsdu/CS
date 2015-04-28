@@ -1,0 +1,76 @@
+10
+
+dir
+287
+https://192.168.1.50:82/svn/ios-discuz-v1.0/trunk/VeryNC/VeryNC/Three20.bundle
+https://192.168.1.50:82/svn/ios-discuz-v1.0
+
+
+
+2012-06-11T03:05:37.812500Z
+194
+sunwei
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2a4be9fb-42ff-7d40-bcac-9f5e271c7f1d
+
+cs.lproj
+dir
+
+de.lproj
+dir
+
+en.lproj
+dir
+
+es.lproj
+dir
+
+fr.lproj
+dir
+
+he.lproj
+dir
+
+images
+dir
+
+it.lproj
+dir
+
+ja.lproj
+dir
+
+ko.lproj
+dir
+
+nl.lproj
+dir
+
+pt.lproj
+dir
+
+ru.lproj
+dir
+
+tr.lproj
+dir
+
+zh_cn.lproj
+dir
+
+zh_tw.lproj
+dir
+
