@@ -13,9 +13,11 @@ if ($_POST['form_submit'] === 'ok' && $captcha === $_SESSION['ShopNC_app_seccode
 			$check = 1;
 		} else {
 			$check = 0;
+            echo '<script>alert("账号或密码错误，请重新输入！");history.back();</script>';
 		}
 	} else {
 		$check = 0;
+        echo '<script>alert("账号或密码错误，请重新输入！");history.back();</script>';
 	}
 
 	if ($check) {

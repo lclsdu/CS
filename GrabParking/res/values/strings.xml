@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">grabpraking</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_launcher">抢车位</string>
+	<string name="tv_wellcome">welcome to grabparking</string>
+	<string name="release_parking">发布车位</string>
+	<string name="find_parking">附近车位</string>
+</resources>

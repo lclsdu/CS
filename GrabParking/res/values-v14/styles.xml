@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
+<!-- 为 Theme 设置背景图 -->
+    <style name="AppStartTheme" parent="android:AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+    <!-- 为 Theme 设置透明属性 -->
+    <style name="AppStartTheme" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="CustomTheme" parent="android:Theme">    
+       <item name="android:windowTitleSize">40dip</item>    
+  </style>    
+
+    
+</resources>

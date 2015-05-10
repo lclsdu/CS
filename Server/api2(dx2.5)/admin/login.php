@@ -32,12 +32,12 @@
     <div class="button">
       <input class="btnEnter" value="" type="submit">
     </div>
-    <!--
+
     <div class="back"><a href="#" target="_blank">返回商城首页</a></div>
-    -->
+
   </form>
   <div class="copyright">Copyright 2007-2012 <a href="http://www.verync.com/" target="_blank">VeryNC</a>, All Rights Reserved <br>
-  天津市网城创想科技有限责任公司</div>
+  北京市网城创想科技有限责任公司</div>
 </div>
 <script>
 $(document).ready(function(){
