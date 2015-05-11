@@ -21,13 +21,20 @@
         android:textSize="21dp"
         android:textStyle="bold" />
 
-    <Button
+    <!-- <Button
         android:id="@+id/TitleBackBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="3dp"
         android:background="@drawable/location"
-        android:gravity="center" />
+        android:gravity="center" /> -->
+        <ImageView
+        android:id="@+id/TitleBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/location" />
 
 </RelativeLayout>
