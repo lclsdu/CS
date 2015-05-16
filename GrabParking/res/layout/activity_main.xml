@@ -10,22 +10,23 @@
         android:clickable="true" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/nearparking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="140dp"
-        android:layout_marginLeft="62dp"
-        android:text="@string/release_parking" />
+        android:layout_marginBottom="56dp"
+        android:layout_marginLeft="112dp"
+        android:text="@string/find_parking" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sellparking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toRightOf="@+id/button1"
-        android:text="@string/find_parking" />
+        android:layout_alignBaseline="@+id/nearparking"
+        android:layout_alignBottom="@+id/nearparking"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/nearparking"
+        android:text="@string/release_parking" />
 
 </RelativeLayout>

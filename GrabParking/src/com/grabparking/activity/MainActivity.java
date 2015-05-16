@@ -2,25 +2,21 @@ package com.grabparking.activity;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.baidu.location.BDNotifyListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BaiduMapOptions;
+import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.grabparking.application.GPApplication;
-import com.grabparking.application.MyLocationListener;
-import com.grabparking.application.NotifyLister;
 
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.annotation.SuppressLint;
@@ -41,27 +37,33 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 @SuppressLint({ "NewApi", "NewApi" })
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 	MapView mMapView = null;
 	private BaiduMap mBaiduMap = null;
 	private TextView view=null;
 	public LocationClient mLocationClient = null;
-	public BDLocationListener myListener = new MyLocationListener();
 	public BDLocation  dblocation=null;
+	private BitmapDescriptor  mCurrentMarker=null;
+	//附近車位
+	private Button nearparking=null;
+	//发布车位
+	private Button sellparking=null;
+	public BDLocationListener myListener = new MyLocationListener();
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.activity_main);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.home_title);
+		initWidget();
 		openGPSSettings();// 提示用户打开gps
 		view=(TextView)findViewById(R.id.Titletext);
 		view.setText("抢车位");
 		// 在使用SDK各组件之前初始化context信息，传入ApplicationContext
 		// 注意该方法要再setContentView方法之前实现
-		SDKInitializer.initialize(getApplicationContext());
 		// 获取地图控件引用
 		mMapView = (MapView) findViewById(R.id.bmapView);
+		mMapView.showZoomControls(false);
 		mBaiduMap = mMapView.getMap();  
 		//普通地图  
 		mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);  
@@ -72,39 +74,101 @@ public class MainActivity extends Activity {
 		//开启热力图  
 		//mBaiduMap.setBaiduHeatMapEnabled(true);
 		//设置缩放级别
-		mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(15).build()));//设置缩放级别
+		mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(17).build()));//设置缩放级别
+		mBaiduMap.getLocationData();
 		// 开启定位图层  
 		//mBaiduMap.setMyLocationEnabled(true);  
 		// 当不需要定位图层时关闭定位图层  
 		//mBaiduMap.setMyLocationEnabled(false);
 		
 		
-		dblocation=GPApplication.gpManager.getLocation(getApplicationContext(), mLocationClient, myListener);
-//		 mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-//		 LocationClientOption option = new LocationClientOption();
-//		 option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
-//		 option.setCoorType("bd09ll");//返回的定位结果是百度经纬度,默认值gcj02
-//		 option.setScanSpan(5000);//设置发起定位请求的间隔时间为5000ms
-//		 option.setIsNeedAddress(true);//返回的定位结果包含地址信息
-//		 option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
-//		 mLocationClient.setLocOption(option);
-//		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
-//		 mLocationClient.start();
+	    
+		 mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+		 LocationClientOption option = new LocationClientOption();
+		 option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
+		 option.setCoorType("bd09ll");//返回的定位结果是百度经纬度,默认值gcj02
+		 option.setScanSpan(5000);//设置发起定位请求的间隔时间为5000ms
+		 option.setIsNeedAddress(true);//返回的定位结果包含地址信息
+		 option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
+		 mLocationClient.setLocOption(option);
+		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
+		 mLocationClient.start();
 //		 if (mLocationClient != null && mLocationClient.isStarted())
-//			    mLocationClient.requestLocation();
+//			    mLocationClient.requestLocation();//离线定位
 //			else 
 //				Log.d("LocSDK5", "locClient is null or not started");
-//		 
-//		 
-		//位置提醒相关代码
-		 BDNotifyListener  mNotifyer = new NotifyLister();
-		 mNotifyer.SetNotifyLocation(dblocation.getLongitude(),dblocation.getLatitude(),3000,"gps");//4个参数代表要位置提醒的点的坐标，具体含义依次为：纬度，经度，距离范围，坐标系类型(gcj02,gps,bd09,bd09ll)
-		 mLocationClient.registerNotify(mNotifyer);
-		 //注册位置提醒监听事件后，可以通过SetNotifyLocation 来修改位置提醒设置，修改后立刻生效。
-		 //取消位置提醒
-		 mLocationClient.removeNotifyEvent(mNotifyer);
+		 
+		 
+		
+//		//位置提醒相关代码
+//		 BDNotifyListener  mNotifyer = new NotifyLister();
+//		 mNotifyer.SetNotifyLocation(dblocation.getLongitude(),dblocation.getLatitude(),3000,"gps");//4个参数代表要位置提醒的点的坐标，具体含义依次为：纬度，经度，距离范围，坐标系类型(gcj02,gps,bd09,bd09ll)
+//		 mLocationClient.registerNotify(mNotifyer);
+//		 //注册位置提醒监听事件后，可以通过SetNotifyLocation 来修改位置提醒设置，修改后立刻生效。
+//		 //取消位置提醒
+//		 mLocationClient.removeNotifyEvent(mNotifyer);
+		 
+		 
+	
 	}
-
+	public class MyLocationListener implements BDLocationListener {
+		
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			if (location == null)
+		            return ;
+			StringBuffer sb = new StringBuffer(256);
+			sb.append("time : ");
+			sb.append(location.getTime());
+			sb.append("\nerror code : ");
+			sb.append(location.getLocType());
+			sb.append("\nlatitude : ");
+			sb.append(location.getLatitude());
+			sb.append("\nlontitude : ");
+			sb.append(location.getLongitude());
+			sb.append("\nradius : ");
+			sb.append(location.getRadius());
+			if (location.getLocType() == BDLocation.TypeGpsLocation){
+				sb.append("\nspeed : ");
+				sb.append(location.getSpeed());
+				sb.append("\nsatellite : ");
+				sb.append(location.getSatelliteNumber());
+			} else if (location.getLocType() == BDLocation.TypeNetWorkLocation){
+				sb.append("\naddr : ");
+				sb.append(location.getAddrStr());
+			} 
+//			 mBaiduMap.setMyLocationEnabled(true);  
+//			//定义Maker坐标点  
+//			LatLng point = new LatLng(location.getLatitude(), location.getLongitude());  
+//			//构建Marker图标  
+//			BitmapDescriptor bitmap = BitmapDescriptorFactory  
+//			    .fromResource(R.drawable.ding);  
+//			//构建MarkerOption，用于在地图上添加Marker  
+//			OverlayOptions option = new MarkerOptions()  
+//			    .position(point)  
+//			    .icon(bitmap);  
+//			//在地图上添加Marker，并显示  
+//			mBaiduMap.addOverlay(option);
+		
+			 mBaiduMap.setMyLocationEnabled(true);  
+			 // 构造定位数据  
+			 MyLocationData locData = new MyLocationData.Builder()  
+			     .accuracy(location.getRadius())  
+			     // 此处设置开发者获取到的方向信息，顺时针0-360  
+			     .direction(0).latitude(location.getLatitude())  
+			     .longitude(location.getLongitude()).build();  
+			 // 设置定位数据  
+			 mBaiduMap.setMyLocationData(locData);  
+			 // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）  
+			 mCurrentMarker = BitmapDescriptorFactory  
+			     .fromResource(R.drawable.ding);  
+			 MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.COMPASS, true, mCurrentMarker);  
+			 mBaiduMap.setMyLocationConfigeration(config);
+			 // 当不需要定位图层时关闭定位图层  
+			//mBaiduMap.setMyLocationEnabled(false);
+			 mBaiduMap.hideInfoWindow();
+		}
+	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -116,6 +180,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		// 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+		  // 注册定位事件，定位后将地图移动到定位点
 		mMapView.onResume();
 	}
 
@@ -136,7 +201,7 @@ public class MainActivity extends Activity {
 		LocationManager alm = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 		if (alm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
-			Toast.makeText(this, "GPS模块正常", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "GPS模块正常", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -181,6 +246,8 @@ public class MainActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						finish();
+						android.os.Process.killProcess(android.os.Process.myPid());
+						System.exit(0);
 					}
 				})
 				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -190,5 +257,55 @@ public class MainActivity extends Activity {
 					}
 				}).setCancelable(false).show();
 	}
+	 // 判断网络连接
+    public static boolean isConnect(Context context)
+    {
+ 
+        // 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
+        try
+        {
+ 
+            ConnectivityManager connectivity = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity != null)
+            {
+                // 获取网络连接管理的对象
+                NetworkInfo info = connectivity.getActiveNetworkInfo();
+ 
+                if (info != null && info.isConnected())
+                {
+ 
+                    // 判断当前网络是否已经连接
+                    if (info.getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Log.v("error", e.toString());
+        }
+        return false;
+    }
+     
+    public void logMsg(String str) {
+         //   textView.setText(str);
+    	Toast.makeText(getApplicationContext(), str, 1);
+    }
 
+	@Override
+	public void initWidget() {
+		// TODO Auto-generated method stub
+		nearparking=(Button)findViewById(R.id.nearparking);
+		sellparking=(Button)findViewById(R.id.sellparking);
+		view=(TextView)findViewById(R.id.Titletext);
+	}
+
+	@Override
+	public void widgetClick(View v) {
+	Log.i("V", ""+v.getId());
+		
+	}
 }

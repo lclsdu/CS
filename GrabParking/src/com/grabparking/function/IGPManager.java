@@ -20,8 +20,4 @@ public interface IGPManager {
 	 * 意见反馈
 	 */
 	public boolean feedback(String feed);
-	/**
-	 * 获得定位结果
-	 */
-	public BDLocation getLocation(Context context,LocationClient mLocationClient,BDLocationListener myListener);
 }
