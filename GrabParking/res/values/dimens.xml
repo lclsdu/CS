@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_circle_indicator_radius">5.0dip</dimen>
+    <dimen name="default_circle_indicator_stroke_width">1.0dip</dimen>
+    <dimen name="huge_size">24.0sp</dimen>
+    <dimen name="large_size">20.0sp</dimen>
+    <dimen name="max_size">18.0sp</dimen>
+    <dimen name="big_size">16.0sp</dimen>
+    <dimen name="medium_size">14.0sp</dimen>
+    <dimen name="small_size">12.0sp</dimen>
+    <dimen name="least_size">10.0sp</dimen>
+    <dimen name="activity_top_margin">18.0dip</dimen>
+    <dimen name="line">1.0dip</dimen>
+    <dimen name="reservation_car_key_textsize">16.0dip</dimen>
+    <dimen name="reservation_car_value_textsize">14.0dip</dimen>
+    <dimen name="reservation_car_config_textsize">13.0dip</dimen>
+</resources>
