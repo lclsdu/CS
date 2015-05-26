@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.grabparking.activity"
     android:versionCode="1"
-    android:versionName="1.0" > 
+    android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14" />
     
@@ -45,7 +45,7 @@
 
         <activity
             android:name="com.grabparking.activity.MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
            <!--  android:theme="@style/CustomTheme" --> 
@@ -57,7 +57,7 @@
         </activity>
         <activity
             android:name="com.grabparking.activity.LauncherActivity"
-            android:label="@string/title_activity_launcher"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
                  android:windowSoftInputMode="adjustPan" >
           <!--   android:theme="@style/AppStartTheme" -->
@@ -73,8 +73,8 @@
                 android:value="android.app.LauncherActivity" />
         </activity>
         <activity
-            android:name="com.grabparking.activity.BaseActivity"
-            android:label="@string/title_activity_base" >
+            android:name="com.grabparking.activity.RegisterActivity"
+            android:label="@string/ok" >
         </activity>
     </application>
 

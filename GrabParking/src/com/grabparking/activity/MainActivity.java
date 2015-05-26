@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,8 +31,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -48,17 +52,20 @@ public class MainActivity extends BaseActivity {
 	private Button nearparking=null;
 	//发布车位
 	private Button sellparking=null;
+	//用户信息
+	private ImageView userBtn=null;
+	//分享测试
+	private ImageView shareBtn=null;
 	public BDLocationListener myListener = new MyLocationListener();
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		 setTheme(R.style.CustomTheme);  
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.home_title);
+		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.home_title);
 		initWidget();
 		openGPSSettings();// 提示用户打开gps
-		view=(TextView)findViewById(R.id.Titletext);
-		view.setText("抢车位");
 		// 在使用SDK各组件之前初始化context信息，传入ApplicationContext
 		// 注意该方法要再setContentView方法之前实现
 		// 获取地图控件引用
@@ -76,6 +83,7 @@ public class MainActivity extends BaseActivity {
 		//设置缩放级别
 		mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(17).build()));//设置缩放级别
 		mBaiduMap.getLocationData();
+		mBaiduMap.setMyLocationEnabled(true);  
 		// 开启定位图层  
 		//mBaiduMap.setMyLocationEnabled(true);  
 		// 当不需要定位图层时关闭定位图层  
@@ -93,6 +101,7 @@ public class MainActivity extends BaseActivity {
 		 mLocationClient.setLocOption(option);
 		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
 		 mLocationClient.start();
+		// mLocationClient.stop();
 //		 if (mLocationClient != null && mLocationClient.isStarted())
 //			    mLocationClient.requestLocation();//离线定位
 //			else 
@@ -137,6 +146,7 @@ public class MainActivity extends BaseActivity {
 				sb.append("\naddr : ");
 				sb.append(location.getAddrStr());
 			} 
+			
 //			 mBaiduMap.setMyLocationEnabled(true);  
 //			//定义Maker坐标点  
 //			LatLng point = new LatLng(location.getLatitude(), location.getLongitude());  
@@ -149,8 +159,8 @@ public class MainActivity extends BaseActivity {
 //			    .icon(bitmap);  
 //			//在地图上添加Marker，并显示  
 //			mBaiduMap.addOverlay(option);
-		
-			 mBaiduMap.setMyLocationEnabled(true);  
+			//滚动显示当前地理位置
+			view.setText(location.getAddrStr());
 			 // 构造定位数据  
 			 MyLocationData locData = new MyLocationData.Builder()  
 			     .accuracy(location.getRadius())  
@@ -181,7 +191,9 @@ public class MainActivity extends BaseActivity {
 		super.onResume();
 		// 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
 		  // 注册定位事件，定位后将地图移动到定位点
-		mMapView.onResume();
+		mBaiduMap.setMyLocationEnabled(true);  
+		 mLocationClient.stop();
+		 mMapView.onResume();
 	}
 
 	@Override
@@ -191,11 +203,6 @@ public class MainActivity extends BaseActivity {
 		mMapView.onPause();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
 
 	private void openGPSSettings() {
 		LocationManager alm = (LocationManager) this
@@ -257,38 +264,6 @@ public class MainActivity extends BaseActivity {
 					}
 				}).setCancelable(false).show();
 	}
-	 // 判断网络连接
-    public static boolean isConnect(Context context)
-    {
- 
-        // 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
-        try
-        {
- 
-            ConnectivityManager connectivity = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivity != null)
-            {
-                // 获取网络连接管理的对象
-                NetworkInfo info = connectivity.getActiveNetworkInfo();
- 
-                if (info != null && info.isConnected())
-                {
- 
-                    // 判断当前网络是否已经连接
-                    if (info.getState() == NetworkInfo.State.CONNECTED)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Log.v("error", e.toString());
-        }
-        return false;
-    }
      
     public void logMsg(String str) {
          //   textView.setText(str);
@@ -297,15 +272,48 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	public void initWidget() {
-		// TODO Auto-generated method stub
-		nearparking=(Button)findViewById(R.id.nearparking);
-		sellparking=(Button)findViewById(R.id.sellparking);
-		view=(TextView)findViewById(R.id.Titletext);
+		nearparking=(Button)findViewById(R.id.nearing_parking);
+		nearparking.setOnClickListener(listener);
+		sellparking=(Button)findViewById(R.id.public_parking);
+		sellparking.setOnClickListener(listener);
+		view=(TextView)findViewById(R.id.tv_name);
+		userBtn=(ImageView)findViewById(R.id.iv_login);
+		userBtn.setOnClickListener(listener);
+		shareBtn=(ImageView)findViewById(R.id.iv_air);
+		userBtn.setOnClickListener(listenershare);
 	}
-
+	
+	OnClickListener listener=new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Log.i("V", ""+v.getId());
+			mBaiduMap.setMyLocationEnabled(false);
+			mLocationClient.stop();
+			Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+			startActivity(intent);
+			
+		}
+	};
+	OnClickListener listenershare=new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			Intent intent=new Intent(Intent.ACTION_SEND); 
+			ComponentName comp = new ComponentName("com.tencent.mm",
+                      "com.tencent.mm.ui.tools.ShareImgUI");
+		    	intent.setType("text/plain"); 
+			  intent.setType("image/*");  
+		      intent.setComponent(comp);
+			intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
+			intent.putExtra(Intent.EXTRA_TEXT, "哈哈、测试");  
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+			startActivity(Intent.createChooser(intent, getTitle()));
+		}
+	};
 	@Override
 	public void widgetClick(View v) {
-	Log.i("V", ""+v.getId());
-		
+	
 	}
+
+
 }
