@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         tools:context=".LauncherActivity" />
 
-    <ProgressBar
+<!--     <ProgressBar
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
@@ -19,6 +19,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="115dp" />
+        android:layout_marginBottom="115dp" /> -->
 
 </RelativeLayout>

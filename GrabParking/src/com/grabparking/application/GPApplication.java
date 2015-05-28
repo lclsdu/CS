@@ -33,7 +33,7 @@ import com.grabparking.utils.CrashHandler;
 public class GPApplication extends Application {
 	private static String TAG=GPApplication.class.getName();
 	public static String PRO_URL="http://qiangchewei001:8889/qiangcheweiphone";
-	public static String downloadApp="http://192.168.0.109:81/app/GrabParking-0.2.apk";
+	public static String downloadApp="http://192.168.1.104:81/app/GrabParking-0.2.apk";
 	public static  GPManager gpManager=null;
 	private String Appid="01";//android手机客户端
 	 private HttpClient httpClient;

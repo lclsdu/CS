@@ -22,9 +22,9 @@ public class RegisterActivity extends BaseActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.activity_register);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.public_title);
+		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.public_title);
 		initWidget();
 	}
 	

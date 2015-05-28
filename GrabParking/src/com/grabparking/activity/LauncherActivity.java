@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
@@ -37,13 +38,13 @@ public class LauncherActivity extends BaseActivity {
 	private final static int MSG_200 = 200;
 	private ProgressBar progressBar;
 	private String appVersion = "1.3.0";
+	private View layout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_launcher);
-		progressBar = (ProgressBar) this.findViewById(R.id.progressBar1);
 		initWidget();
 
 		/**
@@ -55,16 +56,17 @@ public class LauncherActivity extends BaseActivity {
 		}
 		if (!appVersion.equals("1.3.0")) {
 			showAlertDialog();
-			if (Environment.getExternalStorageState().equals(
-					Environment.MEDIA_MOUNTED)) {
-			download(GPApplication.downloadApp,
-					Environment.getExternalStorageDirectory());
-			} else {
-				handler.sendEmptyMessageDelayed(-1, 3000);
-			}
-		}else{
+			// if (Environment.getExternalStorageState().equals(
+			// Environment.MEDIA_MOUNTED)) {
+			// //GPApplication.inflater.inflate(resource, root)
+			// download(GPApplication.downloadApp,
+			// Environment.getExternalStorageDirectory());
+			// } else {
+			// handler.sendEmptyMessageDelayed(-1, 3000);
+			// }
+		} else {
 
-		// 版本有更新开启更新线程 http get apk
+			// 版本有更新开启更新线程 http get apk
 			handler.sendEmptyMessageDelayed(-1, 3000);
 		}
 	}
@@ -151,11 +153,11 @@ public class LauncherActivity extends BaseActivity {
 		}).start();
 	}
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		getMenuInflater().inflate(R.menu.activity_launcher, menu);
-//		return true;
-//	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// getMenuInflater().inflate(R.menu.activity_launcher, menu);
+	// return true;
+	// }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -178,6 +180,7 @@ public class LauncherActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 	}
+
 	public void showAlertDialog() {
 
 		CustomDialog.Builder builder = new CustomDialog.Builder(this);
@@ -186,8 +189,20 @@ public class LauncherActivity extends BaseActivity {
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				//设置你的操作事项
-				download(GPApplication.downloadApp,Environment.getExternalStorageDirectory());
+				layout = GPApplication.inflater
+						.inflate(R.layout.progress_layout, null);
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+					LauncherActivity.this);
+			     builder.setView(layout);
+			     builder.setTitle("更新进度");
+			     builder.create().show();
+				//setContentView(layout);
+				progressBar = (ProgressBar) layout.findViewById(R.id.progressBar1);
+				// setContentView(layout);
+				// 设置你的操作事项
+				download(GPApplication.downloadApp,
+						Environment.getExternalStorageDirectory());
+			
 			}
 		});
 

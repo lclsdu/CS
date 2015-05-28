@@ -39,11 +39,11 @@ public abstract class BaseActivity extends Activity implements OnClickListener{
 	    	super.onCreate(savedInstanceState);
 	    	 Log.d(this.getClass().getSimpleName() , "---------onCreat ");
 	         // 竖屏锁定
-	      //   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//	      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //	         if (mAllowFullScreen) {
 //	             requestWindowFeature(Window.FEATURE_NO_TITLE); // 取消标题
 //	         }
-	        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+	         requestWindowFeature(Window.FEATURE_NO_TITLE);
 	         AppManager.getAppManager().addActivity(this);
 	         
 	    }
