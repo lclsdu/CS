@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=3.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8">
+<title>网页加载错误</title>
+
+
+<style type="text/css">
+	body,div,form,p,ul,li,input{
+		margin:0;
+		padding:0;
+		font-size: 12px;
+	}
+	body{
+		background: #e2e3e6;
+	}
+	.picture{
+		padding-top:50px;
+		margin-top:100px;
+	}
+	.btn{
+		background:#f78234;
+		margin-top: 50px;
+		margin-left: 38%;
+		border-radius: 5px;
+		height:40px;
+		width:24%;
+		color:white;
+		text-align:center;
+		line-height:40px;
+		font-size:18px;
+		
+		
+	}
+</style>
+<script>
+	function goback(){
+		history.go(-2);
+	}
+</script>
+</head>
+<body>
+<div class="picture" style="text-align:center">
+<img src="webIcon_03.png" width="180" height="123" />
+</div>
+  <div class="btn" onclick="window.wo.refreshOnAndroid()">
+    重试
+  </div>
+</div>
+</body>
+</html>

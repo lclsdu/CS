@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/user_btn_normal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@id/re_user_msg"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="17.0"
+        android:background="@drawable/person_background" >
+
+        <ImageButton
+            android:id="@id/imageBtn_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:paddingBottom="8.0dip"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="0.0dip"
+            android:paddingTop="8.0dip"
+            android:src="@drawable/btn_back" />
+
+        <ImageView
+            android:id="@id/image_photo"
+            android:layout_width="90.0dip"
+            android:layout_height="90.0dip"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="45.0dip"
+            android:background="@color/transparent"
+            android:padding="4.0dip"
+            android:src="@drawable/head" />
+
+        <ImageView
+            android:layout_width="90.0dip"
+            android:layout_height="90.0dip"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="45.0dip"
+            android:background="@drawable/head_line"
+            android:padding="4.0dip" />
+
+        <RelativeLayout
+            android:id="@id/login_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10.0dip"
+            android:background="#bb000000"
+            android:paddingBottom="8.0dip"
+            android:paddingTop="8.0dip"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10.0dip"
+                android:textColor="@color/white"
+                android:textSize="@dimen/max_size" />
+
+            <TextView
+                android:id="@id/text_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20.0dip"
+                android:layout_toRightOf="@id/text_name"
+                android:textColor="@color/white"
+                android:textSize="14.0sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10.0dip"
+                android:text="修改"
+                android:textColor="@color/white"
+                android:textSize="14.0sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@id/login_no_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5.0dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="5.0dip"
+            android:paddingLeft="20.0dip"
+            android:paddingRight="20.0dip"
+            android:paddingTop="5.0dip"
+            android:visibility="invisible" >
+
+            <Button
+                android:id="@id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/login_btn_bg"
+                android:gravity="center"
+                android:minHeight="0.0dip"
+                android:text="@string/go_login"
+                android:textColor="@color/white"
+                android:textSize="@dimen/big_size" />
+
+            <Button
+                android:id="@id/btn_register"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/register_btn_bg"
+                android:gravity="center"
+                android:minHeight="0.0dip"
+                android:text="@string/go_register"
+                android:textColor="@color/white"
+                android:textSize="@dimen/big_size" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="6.0"
+        android:background="@color/user_btn_normal"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@id/layout_button_money"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:gravity="center" >
+
+            <RelativeLayout
+                android:id="@id/layout_money"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@id/image_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/money_no" />
+
+                <TextView
+                    android:id="@id/text_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_toRightOf="@id/image_money"
+                    android:text="0"
+                    android:textColor="@color/order_color" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_money"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10.0dip"
+                android:text="充值"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/big_size" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="20.0dip"
+            android:layout_marginTop="20.0dip"
+            android:background="#ffb2b2b2" />
+
+        <RelativeLayout
+            android:id="@id/layout_button_card"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@id/image_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:src="@drawable/bank_card_no" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image_card"
+                android:layout_marginTop="10.0dip"
+                android:text="信用卡"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/big_size" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="20.0dip"
+            android:layout_marginTop="20.0dip"
+            android:background="#ffb2b2b2" />
+
+        <RelativeLayout
+            android:id="@id/my_coupon"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:gravity="center" >
+
+            <RelativeLayout
+                android:id="@id/layout_cheap"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip" >
+
+                <ImageView
+                    android:id="@id/image_cheap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/cheap_no" />
+
+                <TextView
+                    android:id="@id/text_num_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="0"
+                    android:textColor="@color/order_color"
+                    android:textSize="8.0dip" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_cheap"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10.0dip"
+                android:text="优惠券"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/big_size" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="5.0dip"
+        android:background="#ffe8e8e8" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="17.0"
+            android:background="@color/user_btn_normal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@id/user_history_order"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/user_press"
+                android:drawableLeft="@drawable/lishidingdan"
+                android:drawableRight="@drawable/right_arrows"
+                android:gravity="center_vertical"
+                android:paddingBottom="8.0dip"
+                android:paddingLeft="30.0dip"
+                android:paddingRight="8.0dip"
+                android:paddingTop="8.0dip"
+                android:text="@string/history_orders"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30.0dip"
+                android:background="@drawable/lineeee" />
+
+            <TextView
+                android:id="@id/user_invoice_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/user_press"
+                android:drawableLeft="@drawable/fapiao"
+                android:drawableRight="@drawable/right_arrows"
+                android:gravity="center_vertical"
+                android:paddingBottom="8.0dip"
+                android:paddingLeft="30.0dip"
+                android:paddingRight="8.0dip"
+                android:paddingTop="8.0dip"
+                android:text="@string/fp_kfp"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30.0dip"
+                android:background="@drawable/lineeee" />
+
+            <TextView
+                android:id="@id/user_coupon_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/user_press"
+                android:drawableLeft="@drawable/youhui11"
+                android:drawableRight="@drawable/right_arrows"
+                android:gravity="center_vertical"
+                android:paddingBottom="8.0dip"
+                android:paddingLeft="30.0dip"
+                android:paddingRight="8.0dip"
+                android:paddingTop="8.0dip"
+                android:text="@string/coupon_list"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30.0dip"
+                android:background="@drawable/lineeee" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@id/user_share"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/user_press"
+                    android:drawableLeft="@drawable/fenxiang"
+                    android:drawableRight="@drawable/right_arrows"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="8.0dip"
+                    android:paddingLeft="30.0dip"
+                    android:paddingRight="8.0dip"
+                    android:paddingTop="8.0dip"
+                    android:text="@string/app_share"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/medium_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20.0dip"
+                    android:textColor="@color/orage_words"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30.0dip"
+                android:background="@drawable/lineeee" />
+
+            <TextView
+                android:id="@id/user_about"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/user_press"
+                android:drawableLeft="@drawable/gengduo"
+                android:drawableRight="@drawable/right_arrows"
+                android:gravity="center_vertical"
+                android:paddingBottom="8.0dip"
+                android:paddingLeft="30.0dip"
+                android:paddingRight="8.0dip"
+                android:paddingTop="8.0dip"
+                android:text="@string/more_title"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="5.0dip"
+        android:background="#ffe8e8e8" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="4.0"
+        android:background="@color/user_btn_normal"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@id/layout_opinion"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/user_press" >
+
+            <ImageView
+                android:id="@id/image_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="32.0dip"
+                android:background="@drawable/feedback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15.0dip"
+                android:layout_toRightOf="@id/image_feedback"
+                android:text="意见反馈"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:src="#ffbababa" />
+
+        <RelativeLayout
+            android:id="@id/layout_phone"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/user_press" >
+
+            <ImageView
+                android:id="@id/image_go_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="32.0dip"
+                android:background="@drawable/go_phone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15.0dip"
+                android:layout_toRightOf="@id/image_go_phone"
+                android:text="拨打客服"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/medium_size" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

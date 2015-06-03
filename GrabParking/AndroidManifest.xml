@@ -10,8 +10,7 @@
     <!-- <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" > -->
     <!-- </permission> -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
@@ -25,20 +24,26 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.CALL_PHONE"/>
+
 
     <application
         android:name="com.grabparking.application.GPApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/android:Theme.Light" >
+        android:theme="@style/android:Theme.Light.NoTitleBar" >
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >
         </service>
-
+		<receiver android:name="com.grabparking.application.MyReceiver"
+		   				  android:exported="false">  
+            <intent-filter>  
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>  
+            </intent-filter>  
+        </receiver>  
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="cMLSkZR5Lco7A6AkFovKri3M" />
@@ -75,6 +80,38 @@
         <activity
             android:name="com.grabparking.activity.RegisterActivity"
             android:label="@string/ok" >
+        </activity>
+          <activity
+            android:name="com.grabparking.activity.UserMainActivity"
+            android:label="@string/ok" 
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+              <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+            </intent-filter>
+            <intent-filter android:priority="-1" >
+                <action android:name="android.phone.extra.NEW_CALL_INTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+                <data android:scheme="imto" />
+            </intent-filter>
         </activity>
     </application>
 

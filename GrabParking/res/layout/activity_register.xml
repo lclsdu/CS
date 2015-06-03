@@ -1,81 +1,183 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" >
-	<include layout="@layout/public_title"/> 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <include layout="@layout/public_title" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="46dp"
-        android:layout_marginTop="82dp"
-        android:text="手机号码" />
+        android:layout_margin="20.0dip"
+        android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_marginLeft="25dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:ems="10"
-        android:inputType="phone" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-        <requestFocus />
-    </EditText>
+            <Spinner
+                android:id="@id/spinner"
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="8.0dip"
+                android:layout_marginTop="8.0dip"
+                android:layout_weight="1.0"
+                android:gravity="center" />
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:layout_marginTop="35dp"
-        android:ems="10"
-        android:inputType="number" />
+            <EditText
+                android:id="@id/et_phone"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8.0dip"
+                android:layout_weight="1.0"
+                android:background="@drawable/edit_bg_color"
+                android:hint="@string/edit_phone"
+                android:inputType="phone"
+                android:maxLength="20"
+                android:padding="8.0dip"
+                android:singleLine="true"
+                android:textSize="@dimen/big_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="5.0dip"
+                android:text="@string/reg_check_code"
+                android:textColor="@color/common_4.0text"
+                android:textSize="@dimen/big_size" />
+
+            <EditText
+                android:id="@id/et_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8.0dip"
+                android:background="@drawable/edit_bg_color"
+                android:hint="@string/edit_ver_code"
+                android:inputType="number"
+                android:maxLength="4"
+                android:padding="8.0dip"
+                android:singleLine="true"
+                android:textSize="@dimen/big_size" />
+
+            <Button
+                android:id="@id/btn_send_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/public_cant_press3"
+                android:minHeight="0.0dip"
+                android:text="@string/send_check_code"
+                android:textColor="@color/sbcolor"
+                android:textSize="@dimen/big_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="5.0dip"
+                android:text="@string/user_password"
+                android:textColor="@color/common_4.0text"
+                android:textSize="@dimen/big_size" />
+
+            <EditText
+                android:id="@id/et_psd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8.0dip"
+                android:background="@drawable/edit_bg_color"
+                android:hint="@string/edit_pwd"
+                android:inputType="textPassword"
+                android:maxLength="60"
+                android:padding="8.0dip"
+                android:singleLine="true"
+                android:textSize="@dimen/big_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@id/invitation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="5.0dip"
+                android:text="@string/write_invitation"
+                android:textColor="#ff72af2d"
+                android:textSize="@dimen/big_size" />
+
+            <EditText
+                android:id="@id/invitation_code"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8.0dip"
+                android:background="@drawable/edit_bg_color"
+                android:hint="@string/invitation"
+                android:padding="8.0dip"
+                android:singleLine="true"
+                android:textSize="@dimen/big_size"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@id/comit_register_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="45.0dip"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:layout_marginTop="30.0dip"
+        android:background="@drawable/public_cant_press2"
+        android:padding="10.0dip"
+        android:text="@string/tsjy_qrtj"
+        android:textColor="@color/sbcolor"
+        android:textSize="@dimen/big_size" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText1"
-        android:layout_alignBottom="@+id/editText1"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp"
-        android:text="获取验证码" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:layout_marginTop="20.0dip"
+        android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_below="@+id/editText2"
-        android:layout_marginTop="45dp"
-        android:ems="10"
-        android:inputType="textPassword" />
+        <TextView
+            android:id="@id/reg_protocol_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reg_protocol_text"
+            android:textColor="@color/black"
+            android:textSize="@dimen/medium_size" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText3"
-        android:layout_marginBottom="15dp"
-        android:layout_toLeftOf="@+id/editText1"
-        android:text="设置密码" />
+        <TextView
+            android:id="@id/reg_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reg_protocol"
+            android:textColor="#ff72af2d"
+            android:textSize="@dimen/medium_size" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText3"
-        android:layout_below="@+id/editText3"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="78dp"
-        android:text="立即注册" />
-
-</RelativeLayout>
+</LinearLayout>

@@ -8,6 +8,7 @@ import com.grabparking.application.GPApplication;
 import com.grabparking.function.DownloadProgressListener;
 import com.grabparking.utils.AndroidTools;
 import com.grabparking.utils.FileDownloader;
+import com.grabparking.utils.MySharedPreferences;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,14 +40,22 @@ public class LauncherActivity extends BaseActivity {
 	private ProgressBar progressBar;
 	private String appVersion = "1.3.0";
 	private View layout;
+	private MySharedPreferences perf = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_launcher);
 		initWidget();
-
+		// 检查是否首次使用
+		if (!perf.getFirstEnter()) {
+			Toast.makeText(getApplicationContext(), "首次安装使用", Toast.LENGTH_LONG);
+		} else {
+			perf.setFirstEnter(true);
+			Toast.makeText(getApplicationContext(), "非首次安装使用",
+					Toast.LENGTH_LONG);
+		}
 		/**
 		 * 在此进行网络检查，检查版本更新
 		 */
@@ -56,16 +65,7 @@ public class LauncherActivity extends BaseActivity {
 		}
 		if (!appVersion.equals("1.3.0")) {
 			showAlertDialog();
-			// if (Environment.getExternalStorageState().equals(
-			// Environment.MEDIA_MOUNTED)) {
-			// //GPApplication.inflater.inflate(resource, root)
-			// download(GPApplication.downloadApp,
-			// Environment.getExternalStorageDirectory());
-			// } else {
-			// handler.sendEmptyMessageDelayed(-1, 3000);
-			// }
 		} else {
-
 			// 版本有更新开启更新线程 http get apk
 			handler.sendEmptyMessageDelayed(-1, 3000);
 		}
@@ -105,19 +105,12 @@ public class LauncherActivity extends BaseActivity {
 
 	private void installApp(File appFile) {
 		// 创建URI
-
 		Uri uri = Uri.fromFile(appFile);
-
 		// 创建Intent意图
-
 		Intent intent = new Intent(Intent.ACTION_VIEW);
-
 		// 设置Uri和类型
-
 		intent.setDataAndType(uri, "application/vnd.android.package-archive");
-
 		// 执行意图进行安装
-
 		startActivity(intent);
 
 	}
@@ -153,12 +146,6 @@ public class LauncherActivity extends BaseActivity {
 		}).start();
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// getMenuInflater().inflate(R.menu.activity_launcher, menu);
-	// return true;
-	// }
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -172,7 +159,7 @@ public class LauncherActivity extends BaseActivity {
 	@Override
 	public void initWidget() {
 		// TODO Auto-generated method stub
-
+		perf = new MySharedPreferences(getApplicationContext());
 	}
 
 	@Override
@@ -189,20 +176,21 @@ public class LauncherActivity extends BaseActivity {
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				layout = GPApplication.inflater
-						.inflate(R.layout.progress_layout, null);
+				layout = GPApplication.inflater.inflate(
+						R.layout.progress_layout, null);
 				AlertDialog.Builder builder = new AlertDialog.Builder(
-					LauncherActivity.this);
-			     builder.setView(layout);
-			     builder.setTitle("更新进度");
-			     builder.create().show();
-				//setContentView(layout);
-				progressBar = (ProgressBar) layout.findViewById(R.id.progressBar1);
+						LauncherActivity.this);
+				builder.setView(layout);
+				builder.setTitle("更新进度");
+				builder.create().show();
+				// setContentView(layout);
+				progressBar = (ProgressBar) layout
+						.findViewById(R.id.progressBar1);
 				// setContentView(layout);
 				// 设置你的操作事项
 				download(GPApplication.downloadApp,
 						Environment.getExternalStorageDirectory());
-			
+
 			}
 		});
 

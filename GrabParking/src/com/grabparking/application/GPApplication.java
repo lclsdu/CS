@@ -19,12 +19,14 @@ import org.apache.http.protocol.HTTP;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.grabparking.function.GPManager;
 import com.grabparking.utils.CrashHandler;
+import com.grabparking.utils.MySharedPreferences;
 /**
  * 适配百度地图的application
  * @author lcl
@@ -36,7 +38,8 @@ public class GPApplication extends Application {
 	public static String downloadApp="http://192.168.1.104:81/app/GrabParking-0.2.apk";
 	public static  GPManager gpManager=null;
 	private String Appid="01";//android手机客户端
-	 private HttpClient httpClient;
+	 public  HttpClient httpClient=null;
+	 public static  MySharedPreferences perf=null;
 	 //1、对于一个没有被载入或者想要动态载入的界面，都需要使用LayoutInflater.inflate()来载入；
 	// 2、对于一个已经载入的界面，就可以使用Activiyt.findViewById()方法来获得其中的界面元素。
 	public  static LayoutInflater inflater=null;
@@ -53,7 +56,9 @@ public class GPApplication extends Application {
 	     httpClient = createHttpClient();
 	     //加载页面对象
 	     inflater=(LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		/**
+	     getGPManager();
+	    // getMySharePerferences();
+	     /**
 		 * 初始化异常cash的接管类
 		 */
 		CrashHandler crashHandler = CrashHandler.getInstance();  
@@ -69,6 +74,15 @@ public class GPApplication extends Application {
 		}
 		return gpManager;
 	}
+	/**
+	 * shareperfacne
+	 */
+//	public MySharedPreferences getMySharePerferences(){
+//		if(perf==null){
+//			  perf=new MySharedPreferences(this);	
+//		}
+//		return perf;
+//	}
 	 
 	    @Override
 	    public void onLowMemory() {

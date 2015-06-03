@@ -1,6 +1,7 @@
 package com.grabparking.activity;
 
 import com.grabparking.function.AppManager;
+import com.grabparking.utils.AndroidTools;
 import com.grabparking.utils.MySharedPreferences;
 
 import android.app.Activity;
@@ -43,7 +44,8 @@ public abstract class BaseActivity extends Activity implements OnClickListener{
 //	         if (mAllowFullScreen) {
 //	             requestWindowFeature(Window.FEATURE_NO_TITLE); // 取消标题
 //	         }
-	         requestWindowFeature(Window.FEATURE_NO_TITLE);
+	     //    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    	 AndroidTools.isNetworkConnected(getApplicationContext());
 	         AppManager.getAppManager().addActivity(this);
 	         
 	    }

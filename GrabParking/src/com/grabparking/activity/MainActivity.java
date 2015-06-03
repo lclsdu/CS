@@ -6,13 +6,18 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
+import com.baidu.mapapi.map.BaiduMap.OnMapLongClickListener;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
+import com.grabparking.function.AlwaysMarqueeTextView;
 
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -26,6 +31,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.Theme;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -36,6 +42,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -56,14 +64,20 @@ public class MainActivity extends BaseActivity {
 	private ImageView userBtn=null;
 	//分享测试
 	private ImageView shareBtn=null;
+	//title 
+	private RelativeLayout title=null;
+	//显示位置的标题
+	private LinearLayout title_search=null;
+	//手输位置查找按钮
+	private RelativeLayout iv_serarch=null;
+	//手动输入地址查找
+	private AlwaysMarqueeTextView tv_name=null;
 	public BDLocationListener myListener = new MyLocationListener();
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		 setTheme(R.style.CustomTheme);  
+		// setTheme(R.style.CustomTheme);  
 		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.home_title);
 		initWidget();
 		openGPSSettings();// 提示用户打开gps
 		// 在使用SDK各组件之前初始化context信息，传入ApplicationContext
@@ -71,9 +85,13 @@ public class MainActivity extends BaseActivity {
 		// 获取地图控件引用
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		mMapView.showZoomControls(false);
+		//mMapView.
 		mBaiduMap = mMapView.getMap();  
+		mBaiduMap.setOnMapClickListener(clickListener);
+		mBaiduMap.setOnMapLongClickListener(longClickListener);
 		//普通地图  
 		mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);  
+	//	mBaiduMap.
 		//卫星地图  
 		//mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
 		//开启交通图   
@@ -98,6 +116,7 @@ public class MainActivity extends BaseActivity {
 		 option.setScanSpan(5000);//设置发起定位请求的间隔时间为5000ms
 		 option.setIsNeedAddress(true);//返回的定位结果包含地址信息
 		 option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
+		 //option.setNeedDeviceDirect(false);
 		 mLocationClient.setLocOption(option);
 		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
 		 mLocationClient.start();
@@ -172,7 +191,8 @@ public class MainActivity extends BaseActivity {
 			 // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）  
 			 mCurrentMarker = BitmapDescriptorFactory  
 			     .fromResource(R.drawable.ding);  
-			 MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.COMPASS, true, mCurrentMarker);  
+			 //MyLocationConfiguration.LocationMode.COMPASS
+			 MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);  
 			 mBaiduMap.setMyLocationConfigeration(config);
 			 // 当不需要定位图层时关闭定位图层  
 			//mBaiduMap.setMyLocationEnabled(false);
@@ -246,8 +266,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void askForOut() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+		AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 		builder.setTitle("确定退出").setMessage("确定退出？")
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					@Override
@@ -278,11 +297,42 @@ public class MainActivity extends BaseActivity {
 		sellparking.setOnClickListener(listener);
 		view=(TextView)findViewById(R.id.tv_name);
 		userBtn=(ImageView)findViewById(R.id.iv_login);
-		userBtn.setOnClickListener(listener);
+		userBtn.setOnClickListener(listenerUser);
 		shareBtn=(ImageView)findViewById(R.id.iv_air);
-		userBtn.setOnClickListener(listenershare);
+		shareBtn.setOnClickListener(shareListener);
+		title=(RelativeLayout)findViewById(R.id.title_search);
+		title_search=(LinearLayout)findViewById(R.id.title);
+		iv_serarch=(RelativeLayout)findViewById(R.id.iv_search);
+		iv_serarch.setOnClickListener(listenerSearch);
+		tv_name=(AlwaysMarqueeTextView)findViewById(R.id.tv_name);
+		tv_name.setOnClickListener(listenerEdit);
 	}
+	/**
+	 * 按照自定义地点搜索车位事件
+	 */
+	OnClickListener listenerSearch=new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Log.i("V", ""+v.getId());
+			Toast.makeText(getApplicationContext(), "开始查询", Toast.LENGTH_LONG);
+		
+			
+		}
+	};
 	
+	/**
+	 * 单机自定义文本框输入指定地点
+	 */
+	OnClickListener listenerEdit=new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Log.i("V", ""+v.getId());
+			tv_name.setEnabled(true);
+		}
+	};
+	/**
+	 * 打开注册页面
+	 */
 	OnClickListener listener=new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -294,20 +344,63 @@ public class MainActivity extends BaseActivity {
 			
 		}
 	};
-	OnClickListener listenershare=new OnClickListener() {
+	OnClickListener listenerUser=new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+//			Intent intent=new Intent(Intent.ACTION_SEND); 
+//			ComponentName comp = new ComponentName("com.tencent.mm",
+//                      "com.tencent.mm.ui.tools.ShareImgUI");
+//		    	intent.setType("text/plain"); 
+//			  intent.setType("image/*");  
+//		      intent.setComponent(comp);
+//			intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
+//			intent.putExtra(Intent.EXTRA_TEXT, "哈哈、测试");  
+//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+			Intent intent=new Intent(MainActivity.this,UserMainActivity.class); 
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+			//startActivity(Intent.createChooser(intent, getTitle()));
+			startActivity(intent);
+		}
+	};
+	
+	OnClickListener shareListener=new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
 			Intent intent=new Intent(Intent.ACTION_SEND); 
-			ComponentName comp = new ComponentName("com.tencent.mm",
-                      "com.tencent.mm.ui.tools.ShareImgUI");
-		    	intent.setType("text/plain"); 
-			  intent.setType("image/*");  
-		      intent.setComponent(comp);
-			intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
-			intent.putExtra(Intent.EXTRA_TEXT, "哈哈、测试");  
+			intent.setType("text/plain"); //"image/*"
+			intent.putExtra(Intent.EXTRA_SUBJECT,"抢车位"); 
+			intent.putExtra(Intent.EXTRA_TEXT, "我在安卓市场发现了个好东东【通讯录】，快来......下载吧！！安卓市场里面还有很多应用来看看吧！");
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-			startActivity(Intent.createChooser(intent, getTitle()));
+			startActivity(Intent.createChooser(intent, "选择分享类型"));
+			
+		}
+	};
+	
+	OnMapLongClickListener longClickListener=new OnMapLongClickListener() {
+		
+		@Override
+		public void onMapLongClick(LatLng arg0) {
+			nearparking.setVisibility(View.INVISIBLE);
+			title.setVisibility(View.INVISIBLE);
+			sellparking.setVisibility(View.INVISIBLE);
+			title_search.setVisibility(View.INVISIBLE);
+		}
+	};
+	OnMapClickListener clickListener = new OnMapClickListener() {
+		
+		@Override
+		public boolean onMapPoiClick(MapPoi arg0) {
+			return false;
+		}
+		
+		@Override
+		public void onMapClick(LatLng arg0) {
+			nearparking.setVisibility(View.VISIBLE);
+			title.setVisibility(View.VISIBLE);
+			sellparking.setVisibility(View.VISIBLE);
+			title_search.setVisibility(View.VISIBLE);
 		}
 	};
 	@Override

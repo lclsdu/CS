@@ -11,7 +11,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+/**
+ * 更新提示框
+ * @author lcl
+ *
+ */
 public class CustomDialog extends Dialog {
 
 	public CustomDialog(Context context) {
