@@ -50,18 +50,18 @@ public class LauncherActivity extends BaseActivity {
 		initWidget();
 		// 检查是否首次使用
 		if (!perf.getFirstEnter()) {
-			Toast.makeText(getApplicationContext(), "首次安装使用", Toast.LENGTH_LONG);
+			Toast.makeText(getApplicationContext(), "首次安装使用", Toast.LENGTH_LONG).show();
 		} else {
 			perf.setFirstEnter(true);
 			Toast.makeText(getApplicationContext(), "非首次安装使用",
-					Toast.LENGTH_LONG);
+					Toast.LENGTH_LONG).show();
 		}
 		/**
 		 * 在此进行网络检查，检查版本更新
 		 */
 		if (!AndroidTools.isNetworkConnected(getApplicationContext())) {
 			Toast.makeText(getApplicationContext(), "网络连接不可用",
-					Toast.LENGTH_LONG);
+					Toast.LENGTH_LONG).show();
 		}
 		if (!appVersion.equals("1.3.0")) {
 			showAlertDialog();

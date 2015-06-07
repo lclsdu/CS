@@ -292,16 +292,20 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void initWidget() {
 		nearparking=(Button)findViewById(R.id.nearing_parking);
+		nearparking.setTag("near_parking");
 		nearparking.setOnClickListener(listener);
 		sellparking=(Button)findViewById(R.id.public_parking);
+		sellparking.setTag("sell_parking");
 		sellparking.setOnClickListener(listener);
 		view=(TextView)findViewById(R.id.tv_name);
 		userBtn=(ImageView)findViewById(R.id.iv_login);
+		userBtn.setTag("user_btn");
 		userBtn.setOnClickListener(listenerUser);
 		shareBtn=(ImageView)findViewById(R.id.iv_air);
+		shareBtn.setTag("share_btn");
 		shareBtn.setOnClickListener(shareListener);
-		title=(RelativeLayout)findViewById(R.id.title_search);
-		title_search=(LinearLayout)findViewById(R.id.title);
+		//title=(RelativeLayout)findViewById(R.id.title_search);
+	//	title_search=(LinearLayout)findViewById(R.id.title);
 		iv_serarch=(RelativeLayout)findViewById(R.id.iv_search);
 		iv_serarch.setOnClickListener(listenerSearch);
 		tv_name=(AlwaysMarqueeTextView)findViewById(R.id.tv_name);
@@ -314,7 +318,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void onClick(View v) {
 			Log.i("V", ""+v.getId());
-			Toast.makeText(getApplicationContext(), "开始查询", Toast.LENGTH_LONG);
+			Toast.makeText(getApplicationContext(), "开始查询", Toast.LENGTH_LONG).show();
 		
 			
 		}
