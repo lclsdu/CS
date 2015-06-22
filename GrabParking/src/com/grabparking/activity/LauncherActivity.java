@@ -1,12 +1,21 @@
 package com.grabparking.activity;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.util.LangUtils;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.grabparking.application.GPApplication;
 import com.grabparking.function.DownloadProgressListener;
 import com.grabparking.utils.AndroidTools;
+import com.grabparking.utils.Constants;
+import com.grabparking.utils.DeviceUtils;
 import com.grabparking.utils.FileDownloader;
 import com.grabparking.utils.MySharedPreferences;
 
@@ -19,6 +28,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,14 +71,14 @@ public class LauncherActivity extends BaseActivity {
 		 */
 		if (!AndroidTools.isNetworkConnected(getApplicationContext())) {
 			Toast.makeText(getApplicationContext(), "网络连接不可用",
-					Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();	
+			// 直接跳转  无版本更新
+			handler.sendEmptyMessageDelayed(-1, 1000);
+		}else{
+			GPApplication.getInstance().addToRequestQueue(getLoginCheck());
 		}
-		if (!appVersion.equals("1.3.0")) {
-			showAlertDialog();
-		} else {
-			// 版本有更新开启更新线程 http get apk
-			handler.sendEmptyMessageDelayed(-1, 3000);
-		}
+
+		
 	}
 
 	Handler handler = new Handler() {
@@ -170,8 +180,9 @@ public class LauncherActivity extends BaseActivity {
 
 	public void showAlertDialog() {
 
-		CustomDialog.Builder builder = new CustomDialog.Builder(this);
+		CustomDialog.Builder builder = new CustomDialog.Builder(LauncherActivity.this);
 		builder.setMessage("版本更新");
+		builder.setMessage("修复上一版本已知bug");
 		builder.setTitle("提示");
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
@@ -198,10 +209,63 @@ public class LauncherActivity extends BaseActivity {
 				new android.content.DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						handler.sendEmptyMessageDelayed(-1, 500);
 					}
 				});
 
 		builder.create().show();
+		
+	}
+	/**
+	 * 启动app时的检查
+	 * @return
+	 */
+	public  StringRequest getLoginCheck(){
+		StringRequest  request = new StringRequest(  
+		          Request.Method.POST,  
+		          "http://"+Constants.map.get("serverIp")+":"+Constants.map.get("serverPort")+
+		          Constants.map.get("loginCheckURL"),  
+		          new Response.Listener<String>() {  
+		            @Override  
+		            public void onResponse(String s) {  
+		            	if(s.equals("hello world")){
+		            	showAlertDialog();
+		            	
+		            	}else{
+		    			// 直接跳转  无版本更新
+		    			handler.sendEmptyMessageDelayed(-1, 500);
+		            	}
+		            	Log.d("网络返回成功", s);
+		            }  
+		          },  
+		          new Response.ErrorListener() { 
 
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						// TODO Auto-generated method stub
+						
+					}  
+		          }  
+		      )
+		 {  
+		        @Override  
+		        public Map<String, String> getHeaders() throws AuthFailureError {  //设置头信息  
+		          Map<String, String> map = new HashMap<String, String>();  
+		          map.put("Content-Type", "application/x-www-form-urldecoded");  
+		          map.put("client_version", DeviceUtils.getVersionName(getApplicationContext()));  
+		          map.put("phone_type",DeviceUtils.getModel());  
+		          map.put("phone_os", "android");  
+		          return map;  
+		        }  
+		        @Override  
+		        protected Map<String, String> getParams() throws AuthFailureError {  //设置参数  
+		          Map<String, String> map = new HashMap<String, String>();  
+		          map.put("client_version", DeviceUtils.getVersionName(getApplicationContext()));  
+		          map.put("phone_type",DeviceUtils.getModel());  
+		          map.put("phone_os", "android");  
+		          return map;  
+		        }  
+		      };
+		return request;
 	}
 }

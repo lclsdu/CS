@@ -20,9 +20,14 @@ import org.apache.http.protocol.HTTP;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.SDKInitializer;
 import com.grabparking.function.GPManager;
 import com.grabparking.utils.CrashHandler;
@@ -35,7 +40,7 @@ import com.grabparking.utils.MySharedPreferences;
 public class GPApplication extends Application {
 	private static String TAG=GPApplication.class.getName();
 	public static String PRO_URL="http://qiangchewei001:8889/qiangcheweiphone";
-	public static String downloadApp="http://192.168.1.104:81/app/GrabParking-0.2.apk";
+	public static String downloadApp="http://192.168.1.103:8080/KGMobileService/GrabParking-0.2.apk";
 	public static  GPManager gpManager=null;
 	private String Appid="01";//android手机客户端
 	 public  HttpClient httpClient=null;
@@ -43,6 +48,12 @@ public class GPApplication extends Application {
 	 //1、对于一个没有被载入或者想要动态载入的界面，都需要使用LayoutInflater.inflate()来载入；
 	// 2、对于一个已经载入的界面，就可以使用Activiyt.findViewById()方法来获得其中的界面元素。
 	public  static LayoutInflater inflater=null;
+	//
+	public static GPApplication GPapp;
+	/**
+	 * volley全局网络请求队列
+	 */
+	private RequestQueue mRequestQueue;  
 	 /**
 	  * is login
 	  */
@@ -50,20 +61,23 @@ public class GPApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		GPapp=this;
 		// 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
 		SDKInitializer.initialize(getApplicationContext());
 		 //初始化httpclient
 	     httpClient = createHttpClient();
 	     //加载页面对象
 	     inflater=(LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	     getGPManager();
-	    // getMySharePerferences();
 	     /**
 		 * 初始化异常cash的接管类
 		 */
 		CrashHandler crashHandler = CrashHandler.getInstance();  
 		crashHandler.init(getApplicationContext()); 
 	}
+	
+	public static synchronized GPApplication getInstance() {  
+		return GPapp;  
+	}  
 	/**
 	 * signlen  GpManager
 	 * @return
@@ -74,6 +88,48 @@ public class GPApplication extends Application {
 		}
 		return gpManager;
 	}
+	
+	/**
+	 * 获取Volley网络请求的队列
+	 * @return
+	 */
+	public RequestQueue getRequestQueue() {  
+		if (mRequestQueue == null) {  
+			mRequestQueue = Volley.newRequestQueue(getApplicationContext());  
+		}  
+		return mRequestQueue;  
+	}  
+
+	/**
+	 * 将一个http网络请求加入队列
+	 * @param req
+	 * @param tag 该网络请求的标签，这个标签可以用于取消一个对应的网络请求
+	 */
+	public <T> void addToRequestQueue(Request<T> req, String tag) {  
+		req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);  
+
+		VolleyLog.d("Adding request to queue: %s", req.getUrl());  
+
+		getRequestQueue().add(req);  
+	}  
+
+	/**
+	 * 将一个http网络请求加入队列，无标签
+	 * @param req
+	 */
+	public <T> void addToRequestQueue(Request<T> req) {  
+		addToRequestQueue(req, null);
+	}  
+
+	/**
+	 * 根据标签取消一个网络请求
+	 * @param tag
+	 */
+	public void cancelPendingRequests(Object tag) {  
+		if (mRequestQueue != null) {  
+			mRequestQueue.cancelAll(tag);  
+		}  
+	}  
 	/**
 	 * shareperfacne
 	 */

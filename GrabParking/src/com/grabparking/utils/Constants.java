@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
+
+import android.util.Log;
 
 /**
  * 该类主要存储系统变量
@@ -16,19 +19,20 @@ import java.util.Set;
  */
 public class Constants {
 	public static final String SETTING_PREFERENCE_NAME = "SETTING_PREFERENCE";// 保存设置的share
-	static HashMap<String,String> map=new HashMap<String,String>();;
+	public static HashMap<String,String> map=new HashMap<String,String>();
 	static{ 
-		InputStream in=Constants.class.getResourceAsStream("/constnts.properties");
+		InputStream in=Constants.class.getResourceAsStream("/constants.properties");
 		 Properties pro=new Properties();
 		 try {
 			pro.load(in);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(pro.contains("downloadAppUrl")){
-			map.put("downloadAppUrl", pro.getProperty("downloadAppUrl"));
-		}
-		
+		Set keyset=pro.keySet();
+		for(Object obj:keyset){
+			map.put(obj.toString(), pro.getProperty(obj.toString()).toString());
+			Log.d("succes load:"+obj.toString(), pro.getProperty(obj.toString()).toString());
+		}	
 	}
 	/**
 	 * 单点登录的模块名
