@@ -230,7 +230,7 @@ public class LauncherActivity extends BaseActivity {
 		            public void onResponse(String s) {  
 		            	if(s.equals("hello world")){
 		            	showAlertDialog();
-		            	
+		            
 		            	}else{
 		    			// 直接跳转  无版本更新
 		    			handler.sendEmptyMessageDelayed(-1, 500);
