@@ -31,12 +31,15 @@ import com.nfc.reader.SPEC;
 import com.nfc.reader.ThisApplication;
 
 public final class SpanFormatter implements Html.TagHandler {
+	
+	//接口actionHandler 
+	//CharSequence与String都能用于定义字符串，但CharSequence的值是可读可写序列，而String的值是只读序列
 	public interface ActionHandler {
 		void handleAction(CharSequence name);
 	}
 
 	private final ActionHandler handler;
-
+	//构造参数中 初始化actionHandler
 	public SpanFormatter(ActionHandler handler) {
 		this.handler = handler;
 	}
@@ -44,7 +47,11 @@ public final class SpanFormatter implements Html.TagHandler {
 	public CharSequence toSpanned(String html) {
 		return Html.fromHtml(html, null, this);
 	}
-
+	/**
+	 * TextView 的响应事件类
+	 * @author unicom
+	 *
+	 */
 	private static final class ActionSpan extends ClickableSpan {
 		private final String action;
 		private final ActionHandler handler;
@@ -68,7 +75,13 @@ public final class SpanFormatter implements Html.TagHandler {
 			ds.setColor(color);
 		}
 	}
-
+	/**
+	 * 
+	 * @MetricAffectingSpan The classes that affect character-level text formatting 
+	 * in a way that changes the width or height of characters extend this class
+	 * @FontSpan   字体修饰类
+	 *
+	 */
 	private static final class FontSpan extends MetricAffectingSpan {
 
 		final int color;
@@ -121,7 +134,11 @@ public final class SpanFormatter implements Html.TagHandler {
 			updateDrawState(p);
 		}
 	}
-
+	/**
+	 * 
+	 * @LineHeightSpan 
+	 *
+	 */
 	private static final class ParagSpan implements LineHeightSpan {
 		private final int linespaceDelta;
 
@@ -194,7 +211,13 @@ public final class SpanFormatter implements Html.TagHandler {
 			canvas.restore();
 		}
 	}
-
+	/**
+	 * TagHandler接口并在handleTag方法中对自定义的标签做相应的处理即可
+	 *  @ opening：为true时表示开始解析,为false时表示解析完 
+     *  @ tag :当前解析的标签 
+     *  @ output:文本中的内容 
+     *  @ xmlReader:xml解析器 
+	 */
 	@Override
 	public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
 
@@ -243,7 +266,17 @@ public final class SpanFormatter implements Html.TagHandler {
 			}
 		}
 	}
-
+	
+	/**
+	 * Spanned.SPAN_EXCLUSIVE_EXCLUSIVE前后都不包括；
+		Spanned.SPAN_INCLUSIVE_EXCLUSIVE包括前面，不包括后面；
+		Spanned.SPAN_EXCLUSIVE_INCLUSIVE不包括前面，包括后面；
+		Spanned.SPAN_INCLUSIVE_INCLUSIVE前后都包括；
+	 * @param out
+	 * @param pos
+	 * @param colorId
+	 * @param heightId
+	 */
 	private static void markSpliterSpan(Editable out, int pos, int colorId, int heightId) {
 		DisplayMetrics dm = ThisApplication.getDisplayMetrics();
 		int color = ThisApplication.getColorResource(colorId);

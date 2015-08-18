@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.nfc.reader.bean.CityCode;
 import com.nfc.reader.ui.AboutPage;
 import com.nfc.reader.ui.MainPage;
 import com.nfc.reader.ui.NfcPage;

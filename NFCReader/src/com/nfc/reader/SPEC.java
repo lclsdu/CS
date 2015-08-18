@@ -1,5 +1,7 @@
 package com.nfc.reader;
 
+import com.nfc.reader.bean.CityCode;
+
 public final class SPEC {
 	public enum PAGE {
 		DEFAULT, INFO, ABOUT,
@@ -21,7 +23,7 @@ public final class SPEC {
 		DLIMIT(R.string.spec_prop_dlimit),				//最低限额
 		ECASH(R.string.spec_prop_ecash),				//电子现金
 		BALANCE(R.string.spec_prop_balance),		//余额
-		OLIMIT(R.string.spec_prop_olimit),				//透支上线
+		OLIMIT(R.string.spec_prop_olimit),				//透支上限
 		TRANSLOG(R.string.spec_prop_translog),	//交易日志
 		ACCESS(R.string.spec_prop_access),			//访问受限
 		EXCEPTION(R.string.spec_prop_exception);//异常信息
@@ -94,41 +96,12 @@ public final class SPEC {
 	public static final String TAG_LAB = "t_label";
 	public static final String TAG_PARAG = "t_parag";
 	
+	
 	public static String getCityUnionCardNameByZipcode(String zip) {
-		byte[] tree = zip2CityName;
-		if (tree == null) {
-			tree = ThisApplication.loadRawResource(R.raw.zip);
-			zip2CityName = tree;
+			String name=CityCode.getCityCode(zip);
+		if(name!=null){
+			return String.format(APP.CITYUNION.toString(), name);
 		}
-		
-		try {
-
-			int pos = 0, i = 0;
-			do {
-				int k = zip.charAt(i++);
-				if (k < '0' || k > '9')
-					pos = 0;
-				else
-					pos = getInt24(tree, pos + 3 * (k - '0'));
-				
-			} while (pos != 0 && i < zip.length());
-
-			if (pos != 0) {
-				int len = tree[pos + 30] & 0xFF;
-				if (len > 0) {
-					String name = new String(tree, pos + 31, len, "UTF-8");
-					return String.format(APP.CITYUNION.toString(), name);
-				}
-			}
-		} catch (Exception e) {
-		}
-		
 		return String.format(APP.CITYUNION.toString(), APP.UNKNOWNCITY.toString());
 	}
-
-	private static int getInt24(byte[] d, int i) {
-		return (d[i] & 0xFF) << 16 | (d[i + 1] & 0xFF) << 8 | (d[i + 2] & 0xFF);
-	}
-
-	private static byte[] zip2CityName;
 }
