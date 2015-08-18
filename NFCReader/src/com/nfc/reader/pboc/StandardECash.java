@@ -8,6 +8,7 @@ import com.nfc.reader.SPEC;
 import com.nfc.reader.Util;
 import com.nfc.reader.bean.Application;
 import com.nfc.reader.bean.Card;
+import com.nfc.reader.bean.IssuerBankName;
 import com.nfc.reader.tech.Iso7816;
 import com.nfc.reader.tech.Iso7816.BerHouse;
 import com.nfc.reader.tech.Iso7816.BerTLV;
@@ -110,10 +111,10 @@ final class StandardECash extends StandardPboc {
 
 			app.setProperty(SPEC.PROP.SERIAL, pan);
 		}
-
+		String issuerBankName = IssuerBankName.getIssuerName(pan.substring(0,6));
 		Object prop = parseApplicationName(tlvs, pan);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.ID, prop);
+			app.setProperty(SPEC.PROP.ID, issuerBankName+prop.toString());
 
 		prop = parseInteger(tlvs, (short) 0x9F08);
 		if (prop != null)

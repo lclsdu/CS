@@ -37,7 +37,6 @@ public final class NfcPage implements ReaderListener {
 	}
 
 	public static boolean isSendByMe(Intent intent) {
-		ThisApplication.showMessage(1, "test:"+intent.getAction());
 		return intent != null && TAG.equals(intent.getAction());
 	}
 
