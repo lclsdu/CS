@@ -32,7 +32,7 @@ final class CityUnion extends StandardPboc {
 
 		if (d[2] == 0x20 && d[3] == 0x00) {
 			applicationId = SPEC.APP.SHANGHAIGJ;
-			bigEndian = true;
+			bigEndian = true; 
 		} else if (d[2] == 0x71 && d[3] == 0x00) {
 			applicationId = SPEC.APP.CHANGANTONG;
 			bigEndian = false;
