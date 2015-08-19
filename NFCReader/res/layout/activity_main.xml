@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/window"
     android:padding="@dimen/padding_window" >
-
+	<!-- 右下角程序名textView -->
     <TextView
         android:id="@+id/txtAppName"
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
         android:text="@string/app_name"
         android:textColor="#E2E2D0"
         android:textSize="48sp" />
-
+	<!-- 左下角的toolbar -->
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="@dimen/padding_default"
         android:layout_marginLeft="@dimen/padding_default" >
-
+		<!-- 返回 -->
         <ImageButton
             android:id="@+id/btnBack"
             style="@style/toolButton"
@@ -39,7 +39,7 @@
             android:contentDescription="@null"
             android:onClick="onSwitch2DefaultPage"
             android:src="@drawable/back" />
-
+		<!-- 复制 -->
         <ImageButton
             android:id="@+id/btnCopy"
             style="@style/toolButton"
@@ -47,7 +47,7 @@
             android:contentDescription="@null"
             android:onClick="onCopyPageContent"
             android:src="@drawable/copy" />
-        
+        <!-- 分享 -->
         <ImageButton
             android:id="@+id/btnShare"
             style="@style/toolButton"
@@ -55,7 +55,7 @@
             android:contentDescription="@null"
             android:onClick="onSharePageContent"
             android:src="@drawable/share" />
-
+		<!-- 清空 -->
         <ImageButton
             android:id="@+id/btnReset"
             style="@style/toolButton"
@@ -64,7 +64,7 @@
             android:onClick="onSwitch2DefaultPage"
             android:src="@drawable/reset" />
     </LinearLayout>
-
+	<!-- 带切换动画的frameLayout     在appName的上方-->
     <ViewSwitcher
         android:id="@+id/switcher"
         android:layout_width="match_parent"
@@ -82,10 +82,10 @@
             <TextView style="@style/textArea" />
         </ScrollView>
 
-        <ScrollView style="@style/textBoard" >
+ 		<ScrollView style="@style/textBoard" >
 
             <TextView style="@style/textArea" />
-        </ScrollView>
+        </ScrollView> 
     </ViewSwitcher>
 
 </RelativeLayout>

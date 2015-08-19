@@ -58,7 +58,10 @@ public final class NfcPage implements ReaderListener {
 	public void onReadEvent(EVENT event, Object... objs) {
 		if (event == EVENT.IDLE) {
 			showProgressBar();
-		} else if (event == EVENT.FINISHED) {
+		}else if(event==EVENT.READING){
+			showProgressBar();
+		} 
+		else if (event == EVENT.FINISHED) {
 			hideProgressBar();
 
 			final Card card;
@@ -70,8 +73,13 @@ public final class NfcPage implements ReaderListener {
 			activity.setIntent(buildResult(card));
 		}
 	}
-
+	/**
+	 * 构建最终结果集
+	 * @param card
+	 * @return
+	 */
 	private Intent buildResult(Card card) {
+		//Read action Intent
 		final Intent ret = new Intent(TAG);
 
 		if (card != null && !card.hasReadingException()) {

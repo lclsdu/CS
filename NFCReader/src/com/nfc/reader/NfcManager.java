@@ -20,7 +20,7 @@ import com.nfc.reader.rd.ReaderManager;
 
 public final class NfcManager {
 
-	private final Activity activity;
+	private final Activity activity;//上下文
 	//设备nfc适配器
 	private NfcAdapter nfcAdapter;
 	private PendingIntent pendingIntent;
@@ -38,6 +38,7 @@ public final class NfcManager {
 			TAGFILTERS = new IntentFilter[] { new IntentFilter(
 					NfcAdapter.ACTION_TECH_DISCOVERED, "*/*") };
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -45,8 +46,7 @@ public final class NfcManager {
 		this.activity = activity;
 		nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
 		pendingIntent = PendingIntent.getActivity(activity, 0, new Intent(
-				activity, activity.getClass())
-				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+				activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		//设置beam 可用
 		setupBeam(true);
 		//adpater 状态 -1 1 0
@@ -78,9 +78,14 @@ public final class NfcManager {
 
 		return false;
 	}
-
+	/**
+	 * 读取卡片内容的主方法
+	 * @param intent
+	 * @param listener 读取成功的回调接口   NfcPage中实现  并对NFC读出的内容进行组织
+	 * @return
+	 */
 	public boolean readCard(Intent intent, ReaderListener listener) {
-		final Tag tag = (Tag) intent.getParcelableExtra(EXTRA_TAG);
+		final Tag tag = (Tag) intent.getParcelableExtra(EXTRA_TAG);//强制获取NDEF、TECH、TAG的action内容
 		if (tag != null) {
 			ReaderManager.readCard(tag, listener);
 			return true;

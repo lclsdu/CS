@@ -38,6 +38,7 @@ public final class ThisApplication extends Application implements UncaughtExcept
 	}
 
 	public static void showMessage(int fmt, CharSequence... msgs) {
+		//使用本地系统对象格式化字符串
 		String msg = String.format(getStringResource(fmt), msgs);
 		Toast.makeText(instance, msg, Toast.LENGTH_LONG).show();
 	}
@@ -66,7 +67,7 @@ public final class ThisApplication extends Application implements UncaughtExcept
 	public static DisplayMetrics getDisplayMetrics() {
 		return instance.getResources().getDisplayMetrics();
 	}
-
+	
 	public static byte[] loadRawResource(int resId) {
 		InputStream is = null;
 		try {

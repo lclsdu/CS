@@ -39,6 +39,7 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 	/**
 	 * 可以使用进度条增加用户体验度。 此方法在主线程执行，
 	 * 用于显示任务执行时不同的进度。
+	 * 进行中更新
 	 */
 	@Override
 	protected void onProgressUpdate(SPEC.EVENT... events) {
@@ -48,6 +49,7 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 	/**
 	 *  相当于Handler 处理UI的方式，在这里面可以使用在doInBackground 得到
 	 *  的结果处理操作UI。此方法在主线程执行，任务执行的结果作为此方法的参数返回
+	 *  最终结果
 	 */
 	@Override
 	protected void onPostExecute(Card card) {

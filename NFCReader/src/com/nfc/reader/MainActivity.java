@@ -28,8 +28,8 @@ public class MainActivity extends Activity {
 		initViews();
 		//实例化nfc管理类
 		nfc = new NfcManager(this);
-		//进行nfc事件监听
-		onNewIntent(getIntent());
+		//进行nfc事件监听   通过getIntent取回结果数据
+		onNewIntent(getIntent()); 
 	}
 	/**
 	 * back 键后的回调
@@ -46,13 +46,14 @@ public class MainActivity extends Activity {
 	 * Change the intent returned by getIntent. 
 	 * This holds a reference to the given intent; it does not copy it. 
 	 * Often used in conjunction with onNewIntent. 
+	 * onNewIntent 事件后最终获取数据的回调方法
 	 */
 	@Override
 	public void setIntent(Intent intent) {
 		if (NfcPage.isSendByMe(intent))
 			loadNfcPage(intent);
-		else if (AboutPage.isSendByMe(intent))
-			loadAboutPage();
+//		else if (AboutPage.isSendByMe(intent)) 注释的这部分代码不可能走到的 读卡的操作触发不了about页面
+//			loadAboutPage();
 		else
 			super.setIntent(intent);
 	}
@@ -106,7 +107,10 @@ public class MainActivity extends Activity {
 		if (!isCurrentPage(SPEC.PAGE.DEFAULT))
 			loadDefaultPage();
 	}
-
+	/**
+	 * 跳转到关于页面
+	 * @param view
+	 */
 	public void onSwitch2AboutPage(View view) {
 		if (!isCurrentPage(SPEC.PAGE.ABOUT))
 			loadAboutPage();
@@ -121,6 +125,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void loadDefaultPage() {
+		//toolbar初始都不显示
 		toolbar.show(null);
 
 		TextView ta = getBackPage();
@@ -144,9 +149,9 @@ public class MainActivity extends Activity {
 
 	private void loadNfcPage(Intent intent) {
 		final CharSequence info = NfcPage.getContent(this, intent);
-
+		//现获取要切换的下一个view
 		TextView ta = getBackPage();
-
+		
 		if (NfcPage.isNormalInfo(intent)) {
 			toolbar.show(R.id.btnCopy, R.id.btnShare, R.id.btnReset);
 			resetTextArea(ta, SPEC.PAGE.INFO, Gravity.LEFT);
@@ -156,7 +161,8 @@ public class MainActivity extends Activity {
 		}
 
 		ta.setText(info);
-
+		System.out.println("cacaca:"+info);
+		//调用showNext进行上面获取页面的显示
 		board.showNext();
 	}
 	/**
@@ -190,22 +196,30 @@ public class MainActivity extends Activity {
 	}
 
 	private void initViews() {
+		/**
+		 * ViewSwitcher 代表了视图切换组件, 本身继承了FrameLayout ,可以将多个View叠在一起 ,
+		 * 每次只显示一个组件.当程序控制从一个View切换到另个View时,ViewSwitcher 支持指定动画效果.
+		 */
 		board = (ViewSwitcher) findViewById(R.id.switcher);
-
+		
+		//右下角appName设置字体
 		Typeface tf = ThisApplication.getFontResource(R.string.font_oem1);
 		TextView tv = (TextView) findViewById(R.id.txtAppName);
 		tv.setTypeface(tf);
-
+		
+		//这只前一页的字体和响应
 		tf = ThisApplication.getFontResource(R.string.font_oem2);
-
 		tv = getFrontPage();
+		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setTypeface(tf);
-
+		
+		//设置后一页的字体和响应
 		tv = getBackPage();
+		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setTypeface(tf);
-
+		//初始化toolbar对象 viewGroup对象
 		toolbar = new Toolbar((ViewGroup) findViewById(R.id.toolbar));
 	}
 
