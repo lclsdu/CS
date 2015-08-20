@@ -51,7 +51,7 @@
     </string>
     <string name="info_nfc_nocard">
 <![CDATA[
-    <t_tip>没有卡片信息，请将卡片靠近手机后盖上的NFC天线进行读卡。</t_tip>    
+    <t_tip>请将卡片靠近手机后盖上的NFC天线进行读卡</t_tip>    
     ]]>
     </string>
     <string name="info_nfc_error">
@@ -74,7 +74,7 @@
 	<t_head1><app /></t_head1> <version />
 	<br /><t_splitter><br />
 	<br />NFCReader使用手机NFC读取非接触式IC卡中的信息。<br />
-	<br />支持ISO7816-4、Felica智能卡，用来读取电子钱包（主要是公交卡）、电子现金（如闪付卡）账户中没有设置读取限制的有效期、脱机余额、交易记录。<br />
+	<br />支持ISO7816-4、用来读取电子钱包（主要是公交卡）、电子现金（如闪付卡）账户中没有设置读取限制的有效期、脱机余额、交易记录。<br />
 	<br />可以读出的卡片有：上海公交卡、北京市政一卡通（新版）、银联闪付卡<br />
 	</div>
 	]]>

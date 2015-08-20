@@ -1,5 +1,7 @@
 package com.nfc.reader.bean;
 
+import java.io.Serializable;
+
 import com.nfc.reader.SPEC;
 
 import android.util.SparseArray;
@@ -8,7 +10,8 @@ import android.util.SparseArray;
  * @author unicom
  *
  */
-public class Application {
+public class Application implements Serializable{
+	private static final long serialVersionUID = 1L;
 	//SparseArray 性能好于 hashMap  android中建议使用
 	private final SparseArray<Object> properties = new SparseArray<Object>();
 

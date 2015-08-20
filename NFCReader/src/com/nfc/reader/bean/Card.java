@@ -10,6 +10,8 @@ import com.nfc.reader.SPEC;
  *
  */
 public class Card extends Application {
+	private static final long serialVersionUID = 1L;
+
 	public static final Card EMPTY = new Card();
 
 	private final LinkedHashMap<Object, Application> applications;

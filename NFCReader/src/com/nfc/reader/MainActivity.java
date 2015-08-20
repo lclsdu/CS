@@ -1,5 +1,7 @@
 package com.nfc.reader;
 
+import java.util.Collection;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.nfc.reader.bean.Application;
 import com.nfc.reader.bean.CityCode;
 import com.nfc.reader.ui.AboutPage;
 import com.nfc.reader.ui.MainPage;
@@ -162,6 +165,15 @@ public class MainActivity extends Activity {
 
 		ta.setText(info);
 		System.out.println("cacaca:"+info);
+		final Collection<Application> apps =NfcPage.getDATAContent(this, intent);
+		if(apps.isEmpty()){
+			ThisApplication.showMessage(1, "app is null");
+		}
+		for(Application app:apps){
+			if(app!=null&&app.getProperty(SPEC.PROP.BALANCE)!=null){
+			System.out.println("***************data balance**********:"+app.getProperty(SPEC.PROP.BALANCE).toString());
+		}
+		}
 		//调用showNext进行上面获取页面的显示
 		board.showNext();
 	}
@@ -203,22 +215,22 @@ public class MainActivity extends Activity {
 		board = (ViewSwitcher) findViewById(R.id.switcher);
 		
 		//右下角appName设置字体
-		Typeface tf = ThisApplication.getFontResource(R.string.font_oem1);
+		//Typeface tf = ThisApplication.getFontResource(R.string.font_oem1);
 		TextView tv = (TextView) findViewById(R.id.txtAppName);
-		tv.setTypeface(tf);
+		//tv.setTypeface(tf);
 		
 		//这只前一页的字体和响应
-		tf = ThisApplication.getFontResource(R.string.font_oem2);
+		//tf = ThisApplication.getFontResource(R.string.font_oem2);
 		tv = getFrontPage();
 		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setTypeface(tf);
+	//	tv.setTypeface(tf);
 		
 		//设置后一页的字体和响应
 		tv = getBackPage();
 		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setTypeface(tf);
+	//	tv.setTypeface(tf);
 		//初始化toolbar对象 viewGroup对象
 		toolbar = new Toolbar((ViewGroup) findViewById(R.id.toolbar));
 	}

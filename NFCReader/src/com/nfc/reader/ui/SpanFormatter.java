@@ -229,7 +229,8 @@ public final class SpanFormatter implements Html.TagHandler {
 				markFontSpan(output, len, R.color.tag_text, R.dimen.tag_text, Typeface.DEFAULT);
 			} else if (SPEC.TAG_TIP.equals(tag)) {
 				markParagSpan(output, len, R.dimen.tag_parag);
-				markFontSpan(output, len, R.color.tag_tip, R.dimen.tag_tip, getTipFont());
+				markFontSpan(output, len, R.color.tag_tip, R.dimen.tag_tip, Typeface.DEFAULT);
+				//markFontSpan(output, len, R.color.tag_tip, R.dimen.tag_tip, getTipFont());
 			} else if (SPEC.TAG_LAB.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_lab, R.dimen.tag_lab, Typeface.DEFAULT_BOLD);
 			} else if (SPEC.TAG_H1.equals(tag)) {

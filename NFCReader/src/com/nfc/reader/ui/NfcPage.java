@@ -15,6 +15,8 @@ Additional permission under GNU GPL version 3 section 7 */
 
 package com.nfc.reader.ui;
 
+import java.util.Collection;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,13 +24,15 @@ import android.content.Intent;
 import com.nfc.reader.R;
 import com.nfc.reader.ThisApplication;
 import com.nfc.reader.SPEC.EVENT;
+import com.nfc.reader.bean.Application;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.rd.ReaderListener;
 
 public final class NfcPage implements ReaderListener {
-	private static final String TAG = "READCARD_ACTION";
-	private static final String RET = "READCARD_RESULT";
-	private static final String STA = "READCARD_STATUS";
+	private static final String TAG = "READCARD_ACTION";//读卡动作
+	private static final String RET = "READCARD_RESULT";//读卡结果  html对象
+	private static final String DATA = "READCARD_DATA";//原始卡数据对象
+	private static final String STA = "READCARD_STATUS";//读卡成功状态
 
 	private final Activity activity;
 
@@ -52,6 +56,15 @@ public final class NfcPage implements ReaderListener {
 
 		return new SpanFormatter(AboutPage.getActionHandler(activity))
 				.toSpanned(info);
+	}
+	//返回Application 集
+	public static Collection<Application> getDATAContent(Activity activity, Intent intent) {
+
+		Card card = (Card)intent.getSerializableExtra(DATA);
+		if (card == null)
+			return null;
+
+		return card.getApplications();
 	}
 
 	@Override
@@ -89,6 +102,7 @@ public final class NfcPage implements ReaderListener {
 			} else {
 				//成功读取卡信息结果
 				ret.putExtra(RET, card.toHtml());
+				ret.putExtra(DATA, card);
 				ret.putExtra(STA, 1);
 			}
 		} else {
