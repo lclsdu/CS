@@ -156,10 +156,10 @@ public class MainActivity extends Activity {
 		TextView ta = getBackPage();
 		
 		if (NfcPage.isNormalInfo(intent)) {
-			toolbar.show(R.id.btnCopy, R.id.btnShare, R.id.btnReset);
+			//toolbar.show(R.id.btnCopy, R.id.btnShare, R.id.btnReset); 注释
 			resetTextArea(ta, SPEC.PAGE.INFO, Gravity.LEFT);
 		} else {
-			toolbar.show(R.id.btnBack);
+			//toolbar.show(R.id.btnBack);
 			resetTextArea(ta, SPEC.PAGE.INFO, Gravity.CENTER);
 		}
 
