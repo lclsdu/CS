@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
 import com.nfc.reader.bean.Card;
-import com.nfc.reader.pboc.ProtocolAssembler;
+import com.nfc.reader.handle.ProtocolAssembler;
 /**
  * AsyncTask 轻量级异步操作
  * AsyncTask,是android提供的轻量级的异步类,
