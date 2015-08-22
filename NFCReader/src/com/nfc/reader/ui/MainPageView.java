@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 
 import com.nfc.reader.R;
-import com.nfc.reader.ThisApplication;
+import com.nfc.reader.MyApplication;
 
-public final class MainPage {
+public final class MainPageView {
 
 	public static CharSequence getContent(Activity activity) {
 
@@ -22,7 +22,7 @@ public final class MainPage {
 		else
 			resid = R.string.info_nfc_nocard;
 
-		String tip = ThisApplication.getStringResource(resid);
+		String tip = MyApplication.getStringResource(resid);
 
 		return new SpanFormatter(new Handler(activity)).toSpanned(tip);
 	}
@@ -48,6 +48,6 @@ public final class MainPage {
 		}
 	}
 
-	private MainPage() {
+	private MainPageView() {
 	}
 }

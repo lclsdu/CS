@@ -17,7 +17,7 @@ package com.nfc.reader.bean;
 
 import java.util.Collection;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 /**
  * 拼凑html代码类
  * @author unicom
@@ -28,12 +28,12 @@ public final class HtmlFormatter {
 
 		final StringBuilder ret = new StringBuilder();
 		//<div>
-		startTag(ret, SPEC.TAG_BLK);
+		startTag(ret, SpecConf.TAG_BLK);
 		//卡片上应用数目
-		Collection<Application> apps = card.getApplications();
+		Collection<CardApplications> apps = card.getApplications();
 
 		boolean first = true;
-		for (Application app : apps) {
+		for (CardApplications app : apps) {
 
 			if (first) {
 				first = false;
@@ -48,7 +48,7 @@ public final class HtmlFormatter {
 			formatApplicationInfo(ret, app);
 		}
 
-		endTag(ret, SPEC.TAG_BLK);
+		endTag(ret, SpecConf.TAG_BLK);
 
 		return ret.toString();
 	}
@@ -66,7 +66,7 @@ public final class HtmlFormatter {
 	}
 
 	private static void spliter(StringBuilder out) {
-		out.append("\n<").append(SPEC.TAG_SP).append(" />\n");
+		out.append("\n<").append(SpecConf.TAG_SP).append(" />\n");
 	}
 
 	private static boolean formatProperty(StringBuilder out, String tag, Object value) {
@@ -88,16 +88,16 @@ public final class HtmlFormatter {
 		out.append(prop.toString());
 		endTag(out, tag);
 
-		startTag(out, SPEC.TAG_TEXT);
+		startTag(out, SpecConf.TAG_TEXT);
 		out.append(value);
-		endTag(out, SPEC.TAG_TEXT);
+		endTag(out, SpecConf.TAG_TEXT);
 
 		return true;
 	}
 
-	private static boolean formatApplicationInfo(StringBuilder out, Application app) {
+	private static boolean formatApplicationInfo(StringBuilder out, CardApplications app) {
 		//卡号
-		if (!formatProperty(out, SPEC.TAG_H1, app.getProperty(SPEC.PROP.ID)))
+		if (!formatProperty(out, SpecConf.TAG_H1, app.getProperty(SpecConf.PROP.ID)))
 			return false;
 		//<br/>
 		newline(out);
@@ -105,68 +105,68 @@ public final class HtmlFormatter {
 		newline(out);
 		
 		{
-			SPEC.PROP prop = SPEC.PROP.SERIAL;
-			if (formatProperty(out, SPEC.TAG_LAB, prop, app.getStringProperty(prop)))
+			SpecConf.PROP prop = SpecConf.PROP.SERIAL;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.PARAM;
-			if (formatProperty(out, SPEC.TAG_LAB, prop, app.getStringProperty(prop)))
+			SpecConf.PROP prop = SpecConf.PROP.PARAM;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
 		//版本号
 		{
-			SPEC.PROP prop = SPEC.PROP.VERSION;
-			if (formatProperty(out, SPEC.TAG_LAB, prop, app.getStringProperty(prop)))
+			SpecConf.PROP prop = SpecConf.PROP.VERSION;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
 		//日期
 		{
-			SPEC.PROP prop = SPEC.PROP.DATE;
-			if (formatProperty(out, SPEC.TAG_LAB, prop, app.getStringProperty(prop)))
+			SpecConf.PROP prop = SpecConf.PROP.DATE;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
 		//交易次数
 		{
-			SPEC.PROP prop = SPEC.PROP.COUNT;
-			if (formatProperty(out, SPEC.TAG_LAB, prop, app.getStringProperty(prop)))
+			SpecConf.PROP prop = SpecConf.PROP.COUNT;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
 		
 		{
-			SPEC.PROP prop = SPEC.PROP.TLIMIT;
+			SpecConf.PROP prop = SpecConf.PROP.TLIMIT;
 			Float balance = (Float) app.getProperty(prop);
 			if (balance != null && !balance.isNaN()) {
-				String cur = app.getProperty(SPEC.PROP.CURRENCY).toString();
+				String cur = app.getProperty(SpecConf.PROP.CURRENCY).toString();
 				String val = String.format("%.2f %s", balance, cur);
-				if (formatProperty(out, SPEC.TAG_LAB, prop, val))
+				if (formatProperty(out, SpecConf.TAG_LAB, prop, val))
 					newline(out);
 			}
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.DLIMIT;
+			SpecConf.PROP prop = SpecConf.PROP.DLIMIT;
 			Float balance = (Float) app.getProperty(prop);
 			if (balance != null && !balance.isNaN()) {
-				String cur = app.getProperty(SPEC.PROP.CURRENCY).toString();
+				String cur = app.getProperty(SpecConf.PROP.CURRENCY).toString();
 				String val = String.format("%.2f %s", balance, cur);
-				if (formatProperty(out, SPEC.TAG_LAB, prop, val))
+				if (formatProperty(out, SpecConf.TAG_LAB, prop, val))
 					newline(out);
 			}
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.ECASH;
+			SpecConf.PROP prop = SpecConf.PROP.ECASH;
 			Float balance = (Float) app.getProperty(prop);
 
 			if (balance != null) {
-				formatProperty(out, SPEC.TAG_LAB, prop);
+				formatProperty(out, SpecConf.TAG_LAB, prop);
 				if (balance.isNaN()) {
-					out.append(SPEC.PROP.ACCESS);
+					out.append(SpecConf.PROP.ACCESS);
 				} else {
-					formatProperty(out, SPEC.TAG_H2, String.format("%.2f ", balance));
-					formatProperty(out, SPEC.TAG_LAB, app.getProperty(SPEC.PROP.CURRENCY)
+					formatProperty(out, SpecConf.TAG_H2, String.format("%.2f ", balance));
+					formatProperty(out, SpecConf.TAG_LAB, app.getProperty(SpecConf.PROP.CURRENCY)
 							.toString());
 				}
 				newline(out);
@@ -174,16 +174,16 @@ public final class HtmlFormatter {
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.BALANCE;
+			SpecConf.PROP prop = SpecConf.PROP.BALANCE;
 			Float balance = (Float) app.getProperty(prop);
 
 			if (balance != null) {
-				formatProperty(out, SPEC.TAG_LAB, prop);
+				formatProperty(out, SpecConf.TAG_LAB, prop);
 				if (balance.isNaN()) {
-					out.append(SPEC.PROP.ACCESS);
+					out.append(SpecConf.PROP.ACCESS);
 				} else {
-					formatProperty(out, SPEC.TAG_H2, String.format("%.2f ", balance));
-					formatProperty(out, SPEC.TAG_LAB, app.getProperty(SPEC.PROP.CURRENCY)
+					formatProperty(out, SpecConf.TAG_H2, String.format("%.2f ", balance));
+					formatProperty(out, SpecConf.TAG_LAB, app.getProperty(SpecConf.PROP.CURRENCY)
 							.toString());
 				}
 				newline(out);
@@ -191,33 +191,33 @@ public final class HtmlFormatter {
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.OLIMIT;
+			SpecConf.PROP prop = SpecConf.PROP.OLIMIT;
 			Float balance = (Float) app.getProperty(prop);
 			if (balance != null && !balance.isNaN()) {
-				String cur = app.getProperty(SPEC.PROP.CURRENCY).toString();
+				String cur = app.getProperty(SpecConf.PROP.CURRENCY).toString();
 				String val = String.format("%.2f %s", balance, cur);
-				if (formatProperty(out, SPEC.TAG_LAB, prop, val))
+				if (formatProperty(out, SpecConf.TAG_LAB, prop, val))
 					newline(out);
 			}
 		}
 
 		{
-			SPEC.PROP prop = SPEC.PROP.TRANSLOG;
+			SpecConf.PROP prop = SpecConf.PROP.TRANSLOG;
 			String[] logs = (String[]) app.getProperty(prop);
 			if (logs != null && logs.length > 0) {
 
 				spliter(out);
 				newline(out);
 
-				startTag(out, SPEC.TAG_PARAG);
+				startTag(out, SpecConf.TAG_PARAG);
 
-				formatProperty(out, SPEC.TAG_LAB, prop);
+				formatProperty(out, SpecConf.TAG_LAB, prop);
 				newline(out);
 
-				endTag(out, SPEC.TAG_PARAG);
+				endTag(out, SpecConf.TAG_PARAG);
 
 				for (String log : logs) {
-					formatProperty(out, SPEC.TAG_H3, log);
+					formatProperty(out, SpecConf.TAG_H3, log);
 					newline(out);
 				}
 

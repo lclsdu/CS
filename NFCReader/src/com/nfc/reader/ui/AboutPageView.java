@@ -4,17 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.nfc.reader.R;
-import com.nfc.reader.ThisApplication;
+import com.nfc.reader.MyApplication;
 
-public final class AboutPage {
+public final class AboutPageView {
 	private static final String TAG = "ABOUTPAGE_ACTION";
 
 	public static CharSequence getContent(Activity activity) {
 
-		String tip = ThisApplication
+		String tip = MyApplication
 				.getStringResource(R.string.info_main_about);
-		tip = tip.replace("<app />", ThisApplication.name());
-		tip = tip.replace("<version />", ThisApplication.version());
+		tip = tip.replace("<app />", MyApplication.name());
+		tip = tip.replace("<version />", MyApplication.version());
 
 		return new SpanFormatter(null).toSpanned(tip);
 	}
@@ -40,6 +40,6 @@ public final class AboutPage {
 		}
 	}
 
-	private AboutPage() {
+	private AboutPageView() {
 	}
 }

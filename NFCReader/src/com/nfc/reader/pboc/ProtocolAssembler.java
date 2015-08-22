@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.tech.Iso7816;
 
@@ -89,8 +89,8 @@ public abstract class ProtocolAssembler {
 		return DFI_EP;
 	}
 
-	protected SPEC.CUR getCurrency() {
-		return SPEC.CUR.CNY;
+	protected SpecConf.CUR getCurrency() {
+		return SpecConf.CUR.CNY;
 	}
 
 	protected boolean selectMainApplication(Iso7816.StdTag tag) throws IOException {
@@ -126,7 +126,7 @@ public abstract class ProtocolAssembler {
 		/*--------------------------------------------------------------*/
 		// build result
 		/*--------------------------------------------------------------*/
-		final Application app = createApplication();
+		final CardApplications app = createApplication();
 
 		parseBalance(app, BALANCE);
 
@@ -153,33 +153,33 @@ public abstract class ProtocolAssembler {
 		return ret;
 	}
 
-	protected void parseBalance(Application app, Iso7816.Response... data) {
+	protected void parseBalance(CardApplications app, Iso7816.Response... data) {
 
 		float amount = 0f;
 		for (Iso7816.Response rsp : data)
 			amount += parseBalance(rsp);
 
-		app.setProperty(SPEC.PROP.BALANCE, amount);
+		app.setProperty(SpecConf.PROP.BALANCE, amount);
 	}
 
-	protected void parseInfo21(Application app, Iso7816.Response data, int dec, boolean bigEndian) {
+	protected void parseInfo21(CardApplications app, Iso7816.Response data, int dec, boolean bigEndian) {
 		if (!data.isOkey() || data.size() < 30) {
 			return;
 		}
 
 		final byte[] d = data.getBytes();
 		if (dec < 1 || dec > 10) {
-			app.setProperty(SPEC.PROP.SERIAL, Util.toHexString(d, 10, 10));
+			app.setProperty(SpecConf.PROP.SERIAL, Util.toHexString(d, 10, 10));
 		} else {
 			final int sn = bigEndian ? Util.toIntR(d, 19, dec) : Util.toInt(d, 20 - dec, dec);
 
-			app.setProperty(SPEC.PROP.SERIAL, String.format("%d", 0xFFFFFFFFL & sn));
+			app.setProperty(SpecConf.PROP.SERIAL, String.format("%d", 0xFFFFFFFFL & sn));
 		}
 
 		if (d[9] != 0)
-			app.setProperty(SPEC.PROP.VERSION, String.valueOf(d[9]));
+			app.setProperty(SpecConf.PROP.VERSION, String.valueOf(d[9]));
 
-		app.setProperty(SPEC.PROP.DATE, String.format("%02X%02X.%02X.%02X - %02X%02X.%02X.%02X",
+		app.setProperty(SpecConf.PROP.DATE, String.format("%02X%02X.%02X.%02X - %02X%02X.%02X.%02X",
 				d[20], d[21], d[22], d[23], d[24], d[25], d[26], d[27]));
 	}
 
@@ -214,7 +214,7 @@ public abstract class ProtocolAssembler {
 		return ret;
 	}
 
-	protected void parseLog24(Application app, ArrayList<byte[]>... logs) {
+	protected void parseLog24(CardApplications app, ArrayList<byte[]>... logs) {
 		final ArrayList<String> ret = new ArrayList<String>(MAX_LOG);
 
 		for (final ArrayList<byte[]> log : logs) {
@@ -248,15 +248,15 @@ public abstract class ProtocolAssembler {
 		}
 
 		if (!ret.isEmpty())
-			app.setProperty(SPEC.PROP.TRANSLOG, ret.toArray(new String[ret.size()]));
+			app.setProperty(SpecConf.PROP.TRANSLOG, ret.toArray(new String[ret.size()]));
 	}
 
-	protected Application createApplication() {
-		return new Application();
+	protected CardApplications createApplication() {
+		return new CardApplications();
 	}
 
-	protected void configApplication(Application app) {
-		app.setProperty(SPEC.PROP.ID, getApplicationId());
-		app.setProperty(SPEC.PROP.CURRENCY, getCurrency());
+	protected void configApplication(CardApplications app) {
+		app.setProperty(SpecConf.PROP.ID, getApplicationId());
+		app.setProperty(SpecConf.PROP.CURRENCY, getCurrency());
 	}
 }

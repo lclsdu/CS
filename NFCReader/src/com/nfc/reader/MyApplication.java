@@ -8,8 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
-public final class ThisApplication extends Application implements UncaughtExceptionHandler {
-	private static ThisApplication instance;
+public final class MyApplication extends Application implements UncaughtExceptionHandler {
+	private static MyApplication instance;
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {

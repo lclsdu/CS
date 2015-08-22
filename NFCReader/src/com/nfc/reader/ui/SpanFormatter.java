@@ -27,8 +27,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.nfc.reader.R;
-import com.nfc.reader.SPEC;
-import com.nfc.reader.ThisApplication;
+import com.nfc.reader.SpecConf;
+import com.nfc.reader.MyApplication;
 
 public final class SpanFormatter implements Html.TagHandler {
 	
@@ -225,44 +225,44 @@ public final class SpanFormatter implements Html.TagHandler {
 
 		if (opening) {
 
-			if (SPEC.TAG_TEXT.equals(tag)) {
+			if (SpecConf.TAG_TEXT.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_text, R.dimen.tag_text, Typeface.DEFAULT);
-			} else if (SPEC.TAG_TIP.equals(tag)) {
+			} else if (SpecConf.TAG_TIP.equals(tag)) {
 				markParagSpan(output, len, R.dimen.tag_parag);
 				markFontSpan(output, len, R.color.tag_tip, R.dimen.tag_tip, Typeface.DEFAULT);
 				//markFontSpan(output, len, R.color.tag_tip, R.dimen.tag_tip, getTipFont());
-			} else if (SPEC.TAG_LAB.equals(tag)) {
+			} else if (SpecConf.TAG_LAB.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_lab, R.dimen.tag_lab, Typeface.DEFAULT_BOLD);
-			} else if (SPEC.TAG_H1.equals(tag)) {
+			} else if (SpecConf.TAG_H1.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_h1, R.dimen.tag_h1, Typeface.DEFAULT_BOLD);
-			} else if (SPEC.TAG_H2.equals(tag)) {
+			} else if (SpecConf.TAG_H2.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_h2, R.dimen.tag_h2, Typeface.DEFAULT_BOLD);
-			} else if (SPEC.TAG_H3.equals(tag)) {
+			} else if (SpecConf.TAG_H3.equals(tag)) {
 				markFontSpan(output, len, R.color.tag_h3, R.dimen.tag_h3, Typeface.SERIF);
-			} else if (tag.startsWith(SPEC.TAG_ACT)) {
+			} else if (tag.startsWith(SpecConf.TAG_ACT)) {
 				markActionSpan(output, len, tag, R.color.tag_action);
-			} else if (SPEC.TAG_PARAG.equals(tag)) {
+			} else if (SpecConf.TAG_PARAG.equals(tag)) {
 				markParagSpan(output, len, R.dimen.tag_parag);
-			} else if (SPEC.TAG_SP.equals(tag)) {
+			} else if (SpecConf.TAG_SP.equals(tag)) {
 				markSpliterSpan(output, len, R.color.tag_spliter, R.dimen.tag_spliter);
 			}
 		} else {
-			if (SPEC.TAG_TEXT.equals(tag)) {
+			if (SpecConf.TAG_TEXT.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
-			} else if (SPEC.TAG_TIP.equals(tag)) {
+			} else if (SpecConf.TAG_TIP.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
 				setSpan(output, len, ParagSpan.class);
-			} else if (SPEC.TAG_LAB.equals(tag)) {
+			} else if (SpecConf.TAG_LAB.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
-			} else if (SPEC.TAG_H1.equals(tag)) {
+			} else if (SpecConf.TAG_H1.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
-			} else if (SPEC.TAG_H2.equals(tag)) {
+			} else if (SpecConf.TAG_H2.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
-			} else if (SPEC.TAG_H3.equals(tag)) {
+			} else if (SpecConf.TAG_H3.equals(tag)) {
 				setSpan(output, len, FontSpan.class);
-			} else if (tag.startsWith(SPEC.TAG_ACT)) {
+			} else if (tag.startsWith(SpecConf.TAG_ACT)) {
 				setSpan(output, len, ActionSpan.class);
-			} else if (SPEC.TAG_PARAG.equals(tag)) {
+			} else if (SpecConf.TAG_PARAG.equals(tag)) {
 				setSpan(output, len, ParagSpan.class);
 			}
 		}
@@ -279,9 +279,9 @@ public final class SpanFormatter implements Html.TagHandler {
 	 * @param heightId
 	 */
 	private static void markSpliterSpan(Editable out, int pos, int colorId, int heightId) {
-		DisplayMetrics dm = ThisApplication.getDisplayMetrics();
-		int color = ThisApplication.getColorResource(colorId);
-		int height = ThisApplication.getDimensionResourcePixelSize(heightId);
+		DisplayMetrics dm = MyApplication.getDisplayMetrics();
+		int color = MyApplication.getColorResource(colorId);
+		int height = MyApplication.getDimensionResourcePixelSize(heightId);
 		int width = dm.heightPixels > dm.widthPixels ? dm.heightPixels : dm.widthPixels;
 
 		out.append("-------------------").setSpan(new SplitterSpan(color, width, height), pos,
@@ -289,20 +289,20 @@ public final class SpanFormatter implements Html.TagHandler {
 	}
 
 	private static void markFontSpan(Editable out, int pos, int colorId, int sizeId, Typeface face) {
-		int color = ThisApplication.getColorResource(colorId);
-		float size = ThisApplication.getDimensionResourcePixelSize(sizeId);
+		int color = MyApplication.getColorResource(colorId);
+		float size = MyApplication.getDimensionResourcePixelSize(sizeId);
 		FontSpan span = new FontSpan(color, size, face);
 		out.setSpan(span, pos, pos, Spannable.SPAN_MARK_MARK);
 	}
 
 	private static void markParagSpan(Editable out, int pos, int linespaceId) {
-		int linespace = ThisApplication.getDimensionResourcePixelSize(linespaceId);
+		int linespace = MyApplication.getDimensionResourcePixelSize(linespaceId);
 		ParagSpan span = new ParagSpan(linespace);
 		out.setSpan(span, pos, pos, Spannable.SPAN_MARK_MARK);
 	}
 
 	private void markActionSpan(Editable out, int pos, String tag, int colorId) {
-		int color = ThisApplication.getColorResource(colorId);
+		int color = MyApplication.getColorResource(colorId);
 		out.setSpan(new ActionSpan(tag, handler, color), pos, pos, Spannable.SPAN_MARK_MARK);
 	}
 
@@ -330,7 +330,7 @@ public final class SpanFormatter implements Html.TagHandler {
 			ret = wr.get();
 
 		if (ret == null) {
-			ret = ThisApplication.getFontResource(R.string.font_oem3);
+			ret = MyApplication.getFontResource(R.string.font_oem3);
 			TIPFONT = new WeakReference<Typeface>(ret);
 		}
 

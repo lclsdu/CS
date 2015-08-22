@@ -22,13 +22,13 @@ import android.app.Dialog;
 import android.content.Intent;
 
 import com.nfc.reader.R;
-import com.nfc.reader.ThisApplication;
-import com.nfc.reader.SPEC.EVENT;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.MyApplication;
+import com.nfc.reader.SpecConf.EVENT;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.rd.ReaderListener;
 
-public final class NfcPage implements ReaderListener {
+public final class NfcPageView implements ReaderListener {
 	private static final String TAG = "READCARD_ACTION";//读卡动作
 	private static final String RET = "READCARD_RESULT";//读卡结果  html对象
 	private static final String DATA = "READCARD_DATA";//原始卡数据对象
@@ -36,7 +36,7 @@ public final class NfcPage implements ReaderListener {
 
 	private final Activity activity;
 
-	public NfcPage(Activity activity) {
+	public NfcPageView(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -54,11 +54,11 @@ public final class NfcPage implements ReaderListener {
 		if (info == null || info.length() == 0)
 			return null;
 
-		return new SpanFormatter(AboutPage.getActionHandler(activity))
+		return new SpanFormatter(AboutPageView.getActionHandler(activity))
 				.toSpanned(info);
 	}
 	//返回Application 集
-	public static Collection<Application> getDATAContent(Activity activity, Intent intent) {
+	public static Collection<CardApplications> getDATAContent(Activity activity, Intent intent) {
 
 		Card card = (Card)intent.getSerializableExtra(DATA);
 		if (card == null)
@@ -97,7 +97,7 @@ public final class NfcPage implements ReaderListener {
 
 		if (card != null && !card.hasReadingException()) {
 			if (card.isUnknownCard()) {
-				ret.putExtra(RET, ThisApplication
+				ret.putExtra(RET, MyApplication
 						.getStringResource(R.string.info_nfc_unknown));
 			} else {
 				//成功读取卡信息结果
@@ -107,7 +107,7 @@ public final class NfcPage implements ReaderListener {
 			}
 		} else {
 			ret.putExtra(RET,
-					ThisApplication.getStringResource(R.string.info_nfc_error));
+					MyApplication.getStringResource(R.string.info_nfc_error));
 		}
 
 		return ret;

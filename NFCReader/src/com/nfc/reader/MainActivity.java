@@ -14,12 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.CityCode;
-import com.nfc.reader.ui.AboutPage;
-import com.nfc.reader.ui.MainPage;
-import com.nfc.reader.ui.NfcPage;
-import com.nfc.reader.ui.Toolbar;
+import com.nfc.reader.ui.AboutPageView;
+import com.nfc.reader.ui.MainPageView;
+import com.nfc.reader.ui.NfcPageView;
 
 public class MainActivity extends Activity {
 
@@ -40,7 +39,7 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	public void onBackPressed() {
-		if (isCurrentPage(SPEC.PAGE.ABOUT))
+		if (isCurrentPage(SpecConf.PAGE.ABOUT))
 			loadDefaultPage();
 		else if (safeExit)
 			super.onBackPressed();
@@ -53,7 +52,7 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	public void setIntent(Intent intent) {
-		if (NfcPage.isSendByMe(intent))
+		if (NfcPageView.isSendByMe(intent))
 			loadNfcPage(intent);
 //		else if (AboutPage.isSendByMe(intent)) 注释的这部分代码不可能走到的 读卡的操作触发不了about页面
 //			loadAboutPage();
@@ -102,12 +101,12 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
-		if (!nfc.readCard(intent, new NfcPage(this)))
+		if (!nfc.readCard(intent, new NfcPageView(this)))
 			loadDefaultPage();
 	}
 
 	public void onSwitch2DefaultPage(View view) {
-		if (!isCurrentPage(SPEC.PAGE.DEFAULT))
+		if (!isCurrentPage(SpecConf.PAGE.DEFAULT))
 			loadDefaultPage();
 	}
 	/**
@@ -115,63 +114,52 @@ public class MainActivity extends Activity {
 	 * @param view
 	 */
 	public void onSwitch2AboutPage(View view) {
-		if (!isCurrentPage(SPEC.PAGE.ABOUT))
+		if (!isCurrentPage(SpecConf.PAGE.ABOUT))
 			loadAboutPage();
 	}
 
-	public void onCopyPageContent(View view) {
-		toolbar.copyPageContent(getFrontPage());
-	}
-
-	public void onSharePageContent(View view) {
-		toolbar.sharePageContent(getFrontPage());
-	}
-
 	private void loadDefaultPage() {
-		//toolbar初始都不显示
-		toolbar.show(null);
 
 		TextView ta = getBackPage();
 
-		resetTextArea(ta, SPEC.PAGE.DEFAULT, Gravity.CENTER);
-		ta.setText(MainPage.getContent(this));
+		resetTextArea(ta, SpecConf.PAGE.DEFAULT, Gravity.CENTER);
+		ta.setText(MainPageView.getContent(this));
 
 		board.showNext();
 	}
 
 	private void loadAboutPage() {
-		toolbar.show(R.id.btnBack);
 
 		TextView ta = getBackPage();
 
-		resetTextArea(ta, SPEC.PAGE.ABOUT, Gravity.LEFT);
-		ta.setText(AboutPage.getContent(this));
+		resetTextArea(ta, SpecConf.PAGE.ABOUT, Gravity.LEFT);
+		ta.setText(AboutPageView.getContent(this));
 
 		board.showNext();
 	}
 
 	private void loadNfcPage(Intent intent) {
-		final CharSequence info = NfcPage.getContent(this, intent);
+		final CharSequence info = NfcPageView.getContent(this, intent);
 		//现获取要切换的下一个view
 		TextView ta = getBackPage();
 		
-		if (NfcPage.isNormalInfo(intent)) {
+		if (NfcPageView.isNormalInfo(intent)) {
 			//toolbar.show(R.id.btnCopy, R.id.btnShare, R.id.btnReset); 注释
-			resetTextArea(ta, SPEC.PAGE.INFO, Gravity.LEFT);
+			resetTextArea(ta, SpecConf.PAGE.INFO, Gravity.LEFT);
 		} else {
 			//toolbar.show(R.id.btnBack);
-			resetTextArea(ta, SPEC.PAGE.INFO, Gravity.CENTER);
+			resetTextArea(ta, SpecConf.PAGE.INFO, Gravity.CENTER);
 		}
 
 		ta.setText(info);
 		System.out.println("cacaca:"+info);
-		final Collection<Application> apps =NfcPage.getDATAContent(this, intent);
+		final Collection<CardApplications> apps =NfcPageView.getDATAContent(this, intent);
 		if(apps.isEmpty()){
-			ThisApplication.showMessage(1, "app is null");
+			MyApplication.showMessage(1, "app is null");
 		}
-		for(Application app:apps){
-			if(app!=null&&app.getProperty(SPEC.PROP.BALANCE)!=null){
-			System.out.println("***************data balance**********:"+app.getProperty(SPEC.PROP.BALANCE).toString());
+		for(CardApplications app:apps){
+			if(app!=null&&app.getProperty(SpecConf.PROP.BALANCE)!=null){
+			System.out.println("***************data balance**********:"+app.getProperty(SpecConf.PROP.BALANCE).toString());
 		}
 		}
 		//调用showNext进行上面获取页面的显示
@@ -182,16 +170,16 @@ public class MainActivity extends Activity {
 	 * @param which
 	 * @return
 	 */
-	private boolean isCurrentPage(SPEC.PAGE which) {
+	private boolean isCurrentPage(SpecConf.PAGE which) {
 		Object obj = getFrontPage().getTag();
 
 		if (obj == null)
-			return which.equals(SPEC.PAGE.DEFAULT);
+			return which.equals(SpecConf.PAGE.DEFAULT);
 
 		return which.equals(obj);
 	}
 
-	private void resetTextArea(TextView textArea, SPEC.PAGE type, int gravity) {
+	private void resetTextArea(TextView textArea, SpecConf.PAGE type, int gravity) {
 
 		((View) textArea.getParent()).scrollTo(0, 0);
 
@@ -213,30 +201,20 @@ public class MainActivity extends Activity {
 		 * 每次只显示一个组件.当程序控制从一个View切换到另个View时,ViewSwitcher 支持指定动画效果.
 		 */
 		board = (ViewSwitcher) findViewById(R.id.switcher);
-		
-		//右下角appName设置字体
-		//Typeface tf = ThisApplication.getFontResource(R.string.font_oem1);
 		TextView tv = (TextView) findViewById(R.id.txtAppName);
-		//tv.setTypeface(tf);
 		
-		//这只前一页的字体和响应
-		//tf = ThisApplication.getFontResource(R.string.font_oem2);
 		tv = getFrontPage();
 		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-	//	tv.setTypeface(tf);
 		
 		//设置后一页的字体和响应
 		tv = getBackPage();
 		//使超链接<a href>起作用
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-	//	tv.setTypeface(tf);
-		//初始化toolbar对象 viewGroup对象
-		toolbar = new Toolbar((ViewGroup) findViewById(R.id.toolbar));
+
 	}
 
 	private ViewSwitcher board;
-	private Toolbar toolbar;
 	private NfcManager nfc;
 	private boolean safeExit;
 }

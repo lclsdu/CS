@@ -5,7 +5,7 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcF;
 import android.os.AsyncTask;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.pboc.ProtocolAssembler;
@@ -18,7 +18,7 @@ import com.nfc.reader.pboc.ProtocolAssembler;
  * @author unicom
  *
  */
-public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
+public final class ReaderManager extends AsyncTask<Tag, SpecConf.EVENT, Card> {
 
 	public static void readCard(Tag tag, ReaderListener listener) {
 		new ReaderManager(listener).execute(tag);
@@ -42,7 +42,7 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 	 * 进行中更新
 	 */
 	@Override
-	protected void onProgressUpdate(SPEC.EVENT... events) {
+	protected void onProgressUpdate(SpecConf.EVENT... events) {
 		if (realListener != null)
 			realListener.onReadEvent(events[0]);
 	}
@@ -54,7 +54,7 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 	@Override
 	protected void onPostExecute(Card card) {
 		if (realListener != null)
-			realListener.onReadEvent(SPEC.EVENT.FINISHED, card);
+			realListener.onReadEvent(SpecConf.EVENT.FINISHED, card);
 	}
 
 	private Card readCard(Tag tag) {
@@ -63,9 +63,9 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 
 		try {
 			//读取中的进度   
-			publishProgress(SPEC.EVENT.READING);
+			publishProgress(SpecConf.EVENT.READING);
 			
-			card.setProperty(SPEC.PROP.ID, Util.toHexString(tag.getId()));
+			card.setProperty(SpecConf.PROP.ID, Util.toHexString(tag.getId()));
 
 			final IsoDep isodep = IsoDep.get(tag);
 			if (isodep != null)
@@ -77,11 +77,11 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 				//处理nfc f的tag
 				FelicaReader.readCard(nfcf, card);
 			//处理结束
-			publishProgress(SPEC.EVENT.IDLE);
+			publishProgress(SpecConf.EVENT.IDLE);
 
 		} catch (Exception e) {
-			card.setProperty(SPEC.PROP.EXCEPTION, e);
-			publishProgress(SPEC.EVENT.ERROR);
+			card.setProperty(SpecConf.PROP.EXCEPTION, e);
+			publishProgress(SpecConf.EVENT.ERROR);
 		}
 
 		return card;

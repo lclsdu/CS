@@ -2,7 +2,7 @@ package com.nfc.reader;
 
 import com.nfc.reader.bean.CityCode;
 
-public final class SPEC {
+public final class SpecConf {
 	public enum PAGE {
 		DEFAULT, INFO, ABOUT,
 	}
@@ -29,7 +29,7 @@ public final class SPEC {
 		EXCEPTION(R.string.spec_prop_exception);//异常信息
 
 		public String toString() {
-			return ThisApplication.getStringResource(resId);
+			return MyApplication.getStringResource(resId);
 		}
 
 		private final int resId;
@@ -42,22 +42,17 @@ public final class SPEC {
 	public enum APP {
 		UNKNOWN(R.string.spec_app_unknown),
 		UNKNOWNCITY(R.string.spec_zip_unknown),
-		SHENZHENTONG(R.string.spec_app_shenzhentong),
 		QUICKPASS(R.string.spec_app_quickpass),
 		OCTOPUS(R.string.spec_app_octopus_hk),
 		BEIJINGMUNICIPAL(R.string.spec_app_beijing),
-		WUHANTONG(R.string.spec_app_wuhantong),
-		CHANGANTONG(R.string.spec_app_changantong),
 		SHANGHAIGJ(R.string.spec_app_shanghai),
 		DEBIT(R.string.spec_app_debit),
 		CREDIT(R.string.spec_app_credit),
 		QCREDIT(R.string.spec_app_qcredit),
-		TUNIONEC(R.string.spec_app_tunion_ec),
-		TUNIONEP(R.string.spec_app_tunion_ep),
 		CITYUNION(R.string.spec_app_cityunion);
 
 		public String toString() {
-			return ThisApplication.getStringResource(resId);
+			return MyApplication.getStringResource(resId);
 		}
 
 		private final int resId;
@@ -74,7 +69,7 @@ public final class SPEC {
 		HKD(R.string.spec_cur_hkd);
 
 		public String toString() {
-			return ThisApplication.getStringResource(resId);
+			return MyApplication.getStringResource(resId);
 		}
 
 		private final int resId;

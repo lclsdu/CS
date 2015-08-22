@@ -1,13 +1,13 @@
 package com.nfc.reader.pboc;
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.tech.Iso7816;
 
 import android.annotation.SuppressLint;
 
 final class CityTransitHandle extends ProtocolAssembler {
-	private Object applicationId = SPEC.APP.UNKNOWN;
+	private Object applicationId = SpecConf.APP.UNKNOWN;
 
 	@Override
 	protected Object getApplicationId() {
@@ -22,7 +22,7 @@ final class CityTransitHandle extends ProtocolAssembler {
 
 	@SuppressLint("DefaultLocale")
 	@Override
-	protected void parseInfo21(Application app, Iso7816.Response data, int dec, boolean bigEndian) {
+	protected void parseInfo21(CardApplications app, Iso7816.Response data, int dec, boolean bigEndian) {
 
 		if (!data.isOkey() || data.size() < 30) {
 			return;
@@ -31,29 +31,26 @@ final class CityTransitHandle extends ProtocolAssembler {
 		final byte[] d = data.getBytes();
 
 		if (d[2] == 0x20 && d[3] == 0x00) {
-			applicationId = SPEC.APP.SHANGHAIGJ;
+			applicationId = SpecConf.APP.SHANGHAIGJ;
 			bigEndian = true; 
-		} else if (d[2] == 0x71 && d[3] == 0x00) {
-			applicationId = SPEC.APP.CHANGANTONG;
-			bigEndian = false;
 		} else {
-			applicationId = SPEC.getCityUnionCardNameByZipcode(Util.toHexString(d[2], d[3]));
+			applicationId = SpecConf.getCityUnionCardNameByZipcode(Util.toHexString(d[2], d[3]));
 			bigEndian = false;
 		}
 
 		if (dec < 1 || dec > 10) {
-			app.setProperty(SPEC.PROP.SERIAL, Util.toHexString(d, 10, 10));
+			app.setProperty(SpecConf.PROP.SERIAL, Util.toHexString(d, 10, 10));
 		} else {
 			final int sn = Util.toInt(d, 20 - dec, dec);
 			final String ss = bigEndian ? Util.toStringR(sn) : String
 					.format("%d", 0xFFFFFFFFL & sn);
-			app.setProperty(SPEC.PROP.SERIAL, ss);
+			app.setProperty(SpecConf.PROP.SERIAL, ss);
 		}
 
 		if (d[9] != 0)
-			app.setProperty(SPEC.PROP.VERSION, String.valueOf(d[9]));
+			app.setProperty(SpecConf.PROP.VERSION, String.valueOf(d[9]));
 
-		app.setProperty(SPEC.PROP.DATE, String.format("%02X%02X.%02X.%02X - %02X%02X.%02X.%02X",
+		app.setProperty(SpecConf.PROP.DATE, String.format("%02X%02X.%02X.%02X - %02X%02X.%02X.%02X",
 				d[20], d[21], d[22], d[23], d[24], d[25], d[26], d[27]));
 	}
 }

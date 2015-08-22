@@ -15,7 +15,7 @@
         android:required="true" />
 
     <application
-        android:name="com.nfc.reader.ThisApplication"
+        android:name="com.nfc.reader.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/nfcard"

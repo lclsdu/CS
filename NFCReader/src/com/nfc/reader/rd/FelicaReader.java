@@ -17,9 +17,9 @@ package com.nfc.reader.rd;
 
 import java.io.IOException;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.tech.FeliCa;
 
@@ -63,27 +63,22 @@ final class FelicaReader {
 	private static final int SRV_SZT = 0x0118;
 	private static final int SRV_OCTOPUS = 0x0117;
 
-	private static Application readApplication(FeliCa.Tag tag, int system)
+	private static CardApplications readApplication(FeliCa.Tag tag, int system)
 			throws IOException {
 
 		final FeliCa.ServiceCode scode;
-		final Application app;
+		final CardApplications app;
 		if (system == SYS_OCTOPUS) {
-			app = new Application();
-			app.setProperty(SPEC.PROP.ID, SPEC.APP.OCTOPUS);
-			app.setProperty(SPEC.PROP.CURRENCY, SPEC.CUR.HKD);
+			app = new CardApplications();
+			app.setProperty(SpecConf.PROP.ID, SpecConf.APP.OCTOPUS);
+			app.setProperty(SpecConf.PROP.CURRENCY, SpecConf.CUR.HKD);
 			scode = new FeliCa.ServiceCode(SRV_OCTOPUS);
-		} else if (system == SYS_SZT) {
-			app = new Application();
-			app.setProperty(SPEC.PROP.ID, SPEC.APP.SHENZHENTONG);
-			app.setProperty(SPEC.PROP.CURRENCY, SPEC.CUR.CNY);
-			scode = new FeliCa.ServiceCode(SRV_SZT);
 		} else {
 			return null;
 		}
 
-		app.setProperty(SPEC.PROP.SERIAL, tag.getIDm().toString());
-		app.setProperty(SPEC.PROP.PARAM, tag.getPMm().toString());
+		app.setProperty(SpecConf.PROP.SERIAL, tag.getIDm().toString());
+		app.setProperty(SpecConf.PROP.PARAM, tag.getPMm().toString());
 
 		tag.polling(system);
 
@@ -99,9 +94,9 @@ final class FelicaReader {
 		}
 
 		if (p != 0)
-			app.setProperty(SPEC.PROP.BALANCE, parseBalance(data));
+			app.setProperty(SpecConf.PROP.BALANCE, parseBalance(data));
 		else
-			app.setProperty(SPEC.PROP.BALANCE, Float.NaN);
+			app.setProperty(SpecConf.PROP.BALANCE, Float.NaN);
 		
 		return app;
 	}

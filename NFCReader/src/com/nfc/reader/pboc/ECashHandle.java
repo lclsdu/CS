@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.bean.IssuerBankName;
 import com.nfc.reader.tech.Iso7816;
@@ -35,8 +35,8 @@ final class ECashHandle extends ProtocolAssembler {
 			(short) 0xDF62 /* 透支上限 */, };
 
 	@Override
-	protected SPEC.APP getApplicationId() {
-		return SPEC.APP.UNKNOWN;
+	protected SpecConf.APP getApplicationId() {
+		return SpecConf.APP.UNKNOWN;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ final class ECashHandle extends ProtocolAssembler {
 			/*--------------------------------------------------------------*/
 			// build result
 			/*--------------------------------------------------------------*/
-			final Application app = createApplication();
+			final CardApplications app = createApplication();
 
 			parseInfo(app, subTLVs);
 
@@ -103,42 +103,42 @@ final class ECashHandle extends ProtocolAssembler {
 		return card.isUnknownCard() ? HINT.RESETANDGONEXT : HINT.STOP;
 	}
 
-	private static void parseInfo(Application app, BerHouse tlvs) {
+	private static void parseInfo(CardApplications app, BerHouse tlvs) {
 		String pan = parseString(tlvs, (short) 0x5A);
 		if (pan != null) {
 			if (pan.length() > 19)
 				pan = pan.substring(0, 19);
 
-			app.setProperty(SPEC.PROP.SERIAL, pan);
+			app.setProperty(SpecConf.PROP.SERIAL, pan);
 		}
 		String issuerBankName = IssuerBankName.getIssuerName(pan.substring(0,6));
 		Object prop = parseApplicationName(tlvs, pan);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.ID, issuerBankName+prop.toString());
+			app.setProperty(SpecConf.PROP.ID, issuerBankName+prop.toString());
 
 		prop = parseInteger(tlvs, (short) 0x9F08);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.VERSION, prop);
+			app.setProperty(SpecConf.PROP.VERSION, prop);
 
 		prop = parseInteger(tlvs, (short) 0x9F36);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.COUNT, prop);
+			app.setProperty(SpecConf.PROP.COUNT, prop);
 
 		prop = parseValidity(tlvs, (short) 0x5F25, (short) 0x5F24);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.DATE, prop);
+			app.setProperty(SpecConf.PROP.DATE, prop);
 
 		prop = parseCurrency(tlvs, (short) 0x9F51);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.CURRENCY, prop);
+			app.setProperty(SpecConf.PROP.CURRENCY, prop);
 
 		prop = parseAmount(tlvs, (short) 0x9F77);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.DLIMIT, prop);
+			app.setProperty(SpecConf.PROP.DLIMIT, prop);
 
 		prop = parseAmount(tlvs, (short) 0x9F78);
 		if (prop != null)
-			app.setProperty(SPEC.PROP.TLIMIT, prop);
+			app.setProperty(SpecConf.PROP.TLIMIT, prop);
 
 		Float balance = parseAmount(tlvs, (short) 0x9F79);
 		if (balance != null) {
@@ -147,11 +147,11 @@ final class ECashHandle extends ProtocolAssembler {
 				if (over != null && over > 0.01f) {
 					balance -= over;
 					Float limit = parseAmount(tlvs, (short) 0xDF62);
-					app.setProperty(SPEC.PROP.OLIMIT, limit);
+					app.setProperty(SpecConf.PROP.OLIMIT, limit);
 				}
 			}
 
-			app.setProperty(SPEC.PROP.ECASH, balance);
+			app.setProperty(SpecConf.PROP.ECASH, balance);
 		}
 	}
 
@@ -268,7 +268,7 @@ final class ECashHandle extends ProtocolAssembler {
 		}
 	}
 
-	private static SPEC.APP parseApplicationName(BerHouse tlvs, String serial) {
+	private static SpecConf.APP parseApplicationName(BerHouse tlvs, String serial) {
 		String f = parseString(tlvs, (short) 0x84);
 		if (f != null) {
 			Matcher m = Pattern.compile("^([0-9A-F]{10})([0-9A-F]{6})").matcher(f);
@@ -278,29 +278,23 @@ final class ECashHandle extends ProtocolAssembler {
 
 				if ("A000000333".equals(rid)) {
 					if ("010101".equals(pix))
-						return SPEC.APP.DEBIT;
+						return SpecConf.APP.DEBIT;
 
 					if ("010102".equals(pix))
-						return SPEC.APP.CREDIT;
+						return SpecConf.APP.CREDIT;
 
 					if ("010103".equals(pix))
-						return SPEC.APP.QCREDIT;
+						return SpecConf.APP.QCREDIT;
 
-				} else if ("A000000632".equals(rid)) {
-					if ("010105".equals(pix))
-						return SPEC.APP.TUNIONEP;
-
-					if ("010106".equals(pix))
-						return SPEC.APP.TUNIONEC;
-				}
+				} 
 			}
 		}
 
-		return SPEC.APP.UNKNOWN;
+		return SpecConf.APP.UNKNOWN;
 	}
 
-	private static SPEC.CUR parseCurrency(BerHouse tlvs, short tag) {
-		return SPEC.CUR.CNY;
+	private static SpecConf.CUR parseCurrency(BerHouse tlvs, short tag) {
+		return SpecConf.CUR.CNY;
 	}
 
 	private static String parseValidity(BerHouse tlvs, short from, short to) {
@@ -337,7 +331,7 @@ final class ECashHandle extends ProtocolAssembler {
 		return (v != null) ? Util.BCDtoInt(v) : null;
 	}
 
-	private static void parseLogs(Application app, BerHouse tlvs) {
+	private static void parseLogs(CardApplications app, BerHouse tlvs) {
 		final byte[] rawTemp = BerTLV.getValue(tlvs.findFirst((short) 0x9F4F));
 		if (rawTemp == null)
 			return;
@@ -356,7 +350,7 @@ final class ECashHandle extends ProtocolAssembler {
 		}
 
 		if (!ret.isEmpty())
-			app.setProperty(SPEC.PROP.TRANSLOG, ret.toArray(new String[ret.size()]));
+			app.setProperty(SpecConf.PROP.TRANSLOG, ret.toArray(new String[ret.size()]));
 	}
 
 	private static String parseLog(ArrayList<BerTLV> temp, byte[] data) {

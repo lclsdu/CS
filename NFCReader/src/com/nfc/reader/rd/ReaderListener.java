@@ -15,8 +15,8 @@ Additional permission under GNU GPL version 3 section 7 */
 
 package com.nfc.reader.rd;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 
 public interface ReaderListener {
-	void onReadEvent(SPEC.EVENT event, Object... obj);
+	void onReadEvent(SpecConf.EVENT event, Object... obj);
 }

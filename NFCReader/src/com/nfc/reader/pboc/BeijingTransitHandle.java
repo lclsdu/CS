@@ -1,34 +1,19 @@
-/* NFCard is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
-(at your option) any later version.
-
-NFCard is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Wget.  If not, see <http://www.gnu.org/licenses/>.
-
-Additional permission under GNU GPL version 3 section 7 */
-
 package com.nfc.reader.pboc;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.nfc.reader.SPEC;
+import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
-import com.nfc.reader.bean.Application;
+import com.nfc.reader.bean.CardApplications;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.tech.Iso7816;
 
 final class BeijingTransitHandle extends ProtocolAssembler {
 
 	@Override
-	protected SPEC.APP getApplicationId() {
-		return SPEC.APP.BEIJINGMUNICIPAL;
+	protected SpecConf.APP getApplicationId() {
+		return SpecConf.APP.BEIJINGMUNICIPAL;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,7 +50,7 @@ final class BeijingTransitHandle extends ProtocolAssembler {
 		/*--------------------------------------------------------------*/
 		// build result
 		/*--------------------------------------------------------------*/
-		final Application app = createApplication();
+		final CardApplications app = createApplication();
 
 		parseBalance(app, BALANCE);
 
@@ -83,7 +68,7 @@ final class BeijingTransitHandle extends ProtocolAssembler {
 	private final static int SFI_EXTRA_LOG = 4;
 	private final static int SFI_EXTRA_CNT = 5;
 
-	private void parseInfo4(Application app, Iso7816.Response info,
+	private void parseInfo4(CardApplications app, Iso7816.Response info,
 			Iso7816.Response cnt) {
 
 		if (!info.isOkey() || info.size() < 32) {
@@ -91,10 +76,10 @@ final class BeijingTransitHandle extends ProtocolAssembler {
 		}
 
 		final byte[] d = info.getBytes();
-		app.setProperty(SPEC.PROP.SERIAL, Util.toHexString(d, 0, 8));
-		app.setProperty(SPEC.PROP.VERSION,
+		app.setProperty(SpecConf.PROP.SERIAL, Util.toHexString(d, 0, 8));
+		app.setProperty(SpecConf.PROP.VERSION,
 				String.format("%02X.%02X%02X", d[8], d[9], d[10]));
-		app.setProperty(SPEC.PROP.DATE, String.format(
+		app.setProperty(SpecConf.PROP.DATE, String.format(
 				"%02X%02X.%02X.%02X - %02X%02X.%02X.%02X", d[24], d[25], d[26],
 				d[27], d[28], d[29], d[30], d[31]));
 
@@ -102,9 +87,9 @@ final class BeijingTransitHandle extends ProtocolAssembler {
 			byte[] e = cnt.getBytes();
 			final int n = Util.toInt(e, 1, 4);
 			if (e[0] == 0)
-				app.setProperty(SPEC.PROP.COUNT, String.format("%d", n));
+				app.setProperty(SpecConf.PROP.COUNT, String.format("%d", n));
 			else
-				app.setProperty(SPEC.PROP.COUNT, String.format("%d*", n));
+				app.setProperty(SpecConf.PROP.COUNT, String.format("%d*", n));
 		}
 	}
 }
