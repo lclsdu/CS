@@ -329,11 +329,6 @@ public final class SpanFormatter implements Html.TagHandler {
 		if (wr != null)
 			ret = wr.get();
 
-		if (ret == null) {
-			ret = MyApplication.getFontResource(R.string.font_oem3);
-			TIPFONT = new WeakReference<Typeface>(ret);
-		}
-
 		return ret;
 	}
 

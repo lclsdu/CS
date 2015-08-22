@@ -43,11 +43,6 @@ public final class MyApplication extends Application implements UncaughtExceptio
 		Toast.makeText(instance, msg, Toast.LENGTH_LONG).show();
 	}
 
-	public static Typeface getFontResource(int pathId) {
-		String path = getStringResource(pathId);
-		return Typeface.createFromAsset(instance.getAssets(), path);
-	}
-
 	public static int getDimensionResourcePixelSize(int resId) {
 		return instance.getResources().getDimensionPixelSize(resId);
 	}
