@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import com.nfc.reader.SPEC;
 import com.nfc.reader.Util;
 import com.nfc.reader.bean.Card;
-import com.nfc.reader.pboc.StandardPboc;
+import com.nfc.reader.pboc.ProtocolAssembler;
 /**
  * AsyncTask 轻量级异步操作
  * AsyncTask,是android提供的轻量级的异步类,
@@ -70,7 +70,7 @@ public final class ReaderManager extends AsyncTask<Tag, SPEC.EVENT, Card> {
 			final IsoDep isodep = IsoDep.get(tag);
 			if (isodep != null)
 				//处理isoDep的tag
-				StandardPboc.readCard(isodep, card);
+				ProtocolAssembler.readCard(isodep, card);
 
 			final NfcF nfcf = NfcF.get(tag);
 			if (nfcf != null)

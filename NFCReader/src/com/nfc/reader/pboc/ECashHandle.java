@@ -13,7 +13,7 @@ import com.nfc.reader.tech.Iso7816;
 import com.nfc.reader.tech.Iso7816.BerHouse;
 import com.nfc.reader.tech.Iso7816.BerTLV;
 
-final class StandardECash extends StandardPboc {
+final class ECashHandle extends ProtocolAssembler {
 	protected final static byte[] DFN_PPSE = { (byte) '2', (byte) 'P', (byte) 'A', (byte) 'Y',
 			(byte) '.', (byte) 'S', (byte) 'Y', (byte) 'S', (byte) '.', (byte) 'D', (byte) 'D',
 			(byte) 'F', (byte) '0', (byte) '1', };

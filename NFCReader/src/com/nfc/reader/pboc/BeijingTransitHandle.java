@@ -24,7 +24,7 @@ import com.nfc.reader.bean.Application;
 import com.nfc.reader.bean.Card;
 import com.nfc.reader.tech.Iso7816;
 
-final class BeijingMunicipal extends StandardPboc {
+final class BeijingTransitHandle extends ProtocolAssembler {
 
 	@Override
 	protected SPEC.APP getApplicationId() {

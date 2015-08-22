@@ -1,18 +1,3 @@
-/* NFCard is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
-(at your option) any later version.
-
-NFCard is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Wget.  If not, see <http://www.gnu.org/licenses/>.
-
-Additional permission under GNU GPL version 3 section 7 */
-
 package com.nfc.reader.pboc;
 
 import java.io.IOException;
@@ -28,9 +13,9 @@ import com.nfc.reader.tech.Iso7816;
 import android.nfc.tech.IsoDep;
 
 @SuppressWarnings("unchecked")
-public abstract class StandardPboc {
+public abstract class ProtocolAssembler {
 	private static Class<?>[][] readers = {
-			{ BeijingMunicipal.class, CityUnion.class, TUnion.class, }, { StandardECash.class, } };
+			{ BeijingTransitHandle.class, CityTransitHandle.class, }, { ECashHandle.class, } };
 
 	public static void readCard(IsoDep tech, Card card) throws InstantiationException,
 			IllegalAccessException, IOException {
@@ -44,7 +29,7 @@ public abstract class StandardPboc {
 
 			for (final Class<?> r : g) {
 
-				final StandardPboc reader = (StandardPboc) r.newInstance();
+				final ProtocolAssembler reader = (ProtocolAssembler) r.newInstance();
 
 				switch (hint) {
 
@@ -67,15 +52,20 @@ public abstract class StandardPboc {
 
 		tag.close();
 	}
-
+	/**
+	 * 判断javaCard 主文件能否成功选取或支付系统文件
+	 * @param tag
+	 * @return
+	 * @throws IOException
+	 */
 	protected boolean resetTag(Iso7816.StdTag tag) throws IOException {
 		return tag.selectByID(DFI_MF).isOkey() || tag.selectByName(DFN_PSE).isOkey();
 	}
-
+	
 	protected enum HINT {
 		STOP, GONEXT, RESETANDGONEXT,
 	}
-
+	
 	protected final static byte[] DFI_MF = { (byte) 0x3F, (byte) 0x00 };
 	protected final static byte[] DFI_EP = { (byte) 0x10, (byte) 0x01 };
 

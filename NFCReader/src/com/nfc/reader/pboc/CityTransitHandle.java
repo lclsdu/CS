@@ -6,7 +6,7 @@ import com.nfc.reader.tech.Iso7816;
 
 import android.annotation.SuppressLint;
 
-final class CityUnion extends StandardPboc {
+final class CityTransitHandle extends ProtocolAssembler {
 	private Object applicationId = SPEC.APP.UNKNOWN;
 
 	@Override
