@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/window"
+    android:background="@drawable/processing"
     android:padding="@dimen/padding_window" >
 	<!-- 右下角程序名textView -->
     <TextView
@@ -12,14 +12,13 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/padding_default"
         android:layout_marginTop="@dimen/padding_default"
-        android:background="@null"
+        android:background="@drawable/share_5"
         android:clickable="true"
         android:onClick="onSwitch2AboutPage"
         android:shadowColor="#B0B0B0"
         android:shadowDx="-1"
         android:shadowDy="-1"
         android:shadowRadius="1"
-        android:text="@string/app_name"
         android:textColor="#E2E2D0"
         android:textSize="48sp" />
 	<!-- 带切换动画的frameLayout     在appName的上方-->
@@ -35,12 +34,14 @@
         android:inAnimation="@anim/fade_in"
         android:outAnimation="@anim/fade_out" >
 
-        <ScrollView style="@style/textBoard" >
+        <ScrollView style="@style/textBoard" 
+            			android:background="@drawable/background"> 
 
             <TextView style="@style/textArea" />
         </ScrollView>
 
- 		<ScrollView style="@style/textBoard" >
+ 		<ScrollView style="@style/textBoard" 
+ 		  android:background="@drawable/background"> 
 
             <TextView style="@style/textArea" />
         </ScrollView> 

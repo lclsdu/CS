@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	<div style="width:30%;float:left;">
+		[#include 'inc_my_left.html'/]
+	</div>
+	<div style="width:70%;float:right;">
+		<div style="margin-top:10px;"><img src="${user.avatarLarge}"/></div>
+		<div style="margin-top:10px;"><img src="${user.avatarSmall}"/></div>
+		<div style="margin-top:10px;"><img src="${user.avatar}"/></div>
+	</div>
+	<div class="clear"></div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

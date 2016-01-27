@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户注册_${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<script type="text/javascript">
+$(function() {
+	$("#validForm").validate();
+});
+</script>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：<a href="${ctx}/">首页</a> > 用户注册
+</div>
+<div class="center">
+<form id="validForm" action="${ctx}/register.jspx" method="post">
+<p>用户名：<input type="text" name="username" class="{required:true,minlength:${global.register.minLength},maxlength:${global.register.maxLength},remote:'${ctx}/register_check_username.do'}"/></p>
+<p>密码：<input type="password" id="password" name="password" class="required" maxlength="100"/></p>
+<p>重复密码：<input type="password" equalTo="#password"/></p>
+<p>邮箱：<input type="text" name="email" class="email required" maxlength="100"/></p>
+<p>验证码：<input type="text" name="captcha" class="required" maxlength="20"/></p>
+<p>用户注册协议：<textarea style="width:500px;height:80px;"></textarea></p>
+<p><label><input type="checkbox" name="agree" value="true" checked="checked" class="required"/>同意协议</label></p>
+<p><input type="submit" value="提交"/></p>
+</form>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

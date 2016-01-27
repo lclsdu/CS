@@ -1,0 +1,17 @@
+<div style="float:right;padding-right:30px;">
+<script type="text/javascript" src="${ctx}/login_include.jspx"></script>
+<a href="${ctx}/sitemap.jspx">网站地图</a>
+<a href="${ctx}/rsscenter.jspx">RSS</a>
+</div>
+[@NodeList;list]
+<ul class="nav center">
+	<li>[@A bean=getNode()/]</li>
+[#list list as node]
+  <li>[@A bean=node/]</li>
+[/#list]
+	<div style="clear:both;"></div>
+</ul>
+[/@NodeList]
+<form action="${ctx}/search.jspx" method="get" class="center" style="padding-bottom:20px;">
+<input type="text" name="q" value="${Param.q!?html}"/> <input type="submit" value="搜索"/>
+</form>

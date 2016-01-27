@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>主题：${anchor.title} -- Powerd by Jspxcms</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center" style="line-height:200%">
+	<h1><a href="${anchor.url}">${anchor.title}</a></h1>
+	<p>${anchor.description}</p>
+	<div style="padding:20px;">
+		[@CommentPage fid=Param.fid;pagedList]
+		<h2>网友评论:</h2>
+		<ul>
+		[#list pagedList.content as comment]
+			<li>
+				<div>${comment.creator.username},${comment.creationDate?string("yyyy-MM-dd")}</div>
+				<p>${comment.text?html}</p>
+			</li>
+		[/#list]
+		</ul>
+		[/@CommentPage]
+	</div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

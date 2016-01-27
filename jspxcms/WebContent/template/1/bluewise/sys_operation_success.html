@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>操作成功 -- Powerd by Jspxcms</title>
+[#include 'inc_head.html'/]
+<script type="text/javascript">
+[#if timeout??]
+	[#if timeout=="-1"]
+		[#--timeout等于-1，不跳转--]
+	[#elseif timeout=="0"]
+		[#--timeout等于0，直接跳转，不延时--]
+		location.href="${(nextUrl!ctx)?html}";
+	[#else]
+		setTimeout(function(){location.href="${(nextUrl!ctx)?html}";},${timeout});
+	[/#if]
+[#else]
+setTimeout(function(){location.href="${(nextUrl!ctx)?html}";},2000);
+[/#if]
+
+</script>
+</head>
+<body>
+<ul>
+	[#if status_0??]
+		<li>${status_0?html}</li>
+	[#elseif messages?? && messages?size>0]
+		[#list messages as m]
+		<li>${m?html}</li>
+		[/#list]
+	[#else]
+		<li>操作成功</li>
+	[/#if]
+</ul>
+<p><a href="${(nextUrl!ctx)?html}">返回</a></p>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${node.name}_${site.fullNameOrName}</title>
+<meta name="keywords" content="${node.keywords}"/>
+<meta name="description" content="${node.description}"/>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：[#list node.hierarchy as node]<a href="${node.url}">${node.name}</a>[#if node_has_next] > [/#if][/#list]
+</div>
+
+<div class="center">
+	<div style="float:left;width:200px;border:1px solid #999;">
+		<div style="padding:10px;">
+			<h2>[@Node number='company';n]<a href="${n.url}">${n.name}</a>[/@Node]</h2>
+			<ul>
+			[@NodeList parent='company';list]
+			[#list list as n]
+				<li><a href="${n.url}">${n.name}</a></li>
+			[/#list]
+			[/@NodeList]
+			</ul>
+		</div>
+	</div>
+	<div>${node.getCustomsValue('select1')} ${node.p0Value}</div>
+	<div style="float:right;width:735px;border:1px solid #999;">
+		<h2>子节点循环</h2>
+		[@NodeList parentId=node.id isRealNode='true';list]
+		[#list list as node]
+		<div class="block">
+			<h6><a href="${node.url}">${node.name}</a></h6>
+			<ul>
+				[@InfoList nodeId=node.id isIncludeChildren='true' limit='2';list]
+				[#list list as info]
+				<li><a href="${info.url}">${substring(info.title,15,'...')}</a></li>
+				[/#list]
+				[/@InfoList]
+			</ul>
+		</div>
+		[/#list]
+		[/@NodeList]
+		<div style="clear:both;"></div>	
+	</div>
+	<div style="clear:both;"></div>	
+</div>
+<div class="center"><span id="node_views"></span><script type="text/javascript">$("#node_views").load("${ctx}/node_views/${node.id}.jspx?d="+new Date()*1);</script></div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

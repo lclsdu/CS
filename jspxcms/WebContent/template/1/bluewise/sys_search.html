@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jspxcms搜索_${Param.q!?html}_${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<style type="text/css">
+em.term{color:#cc0000;font-style:normal;}
+</style>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：<a href="${ctx}/"></a> > 搜索
+</div>
+<div class="center">
+	<div style="float:left;width:200px;border:1px solid #999;">
+		<div style="padding:10px;">
+			<h2>[@Node number='company';n]<a href="${n.url}">${n.name}</a>[/@Node]</h2>
+			<ul>
+			[@NodeList parent='company';list]
+			[#list list as n]
+				<li><a href="${n.url}">${n.name}</a></li>
+			[/#list]
+			[/@NodeList]
+			</ul>
+		</div>
+	</div>
+	<div style="float:right;width:735px;border:1px solid #999;">
+		<div style="padding:20px;line-height:200%;">
+			[@InfoFulltextPage q=Param.q pageSize='5' sort='publishDate long desc';pagedList]
+			<ul>
+			[#list pagedList.content as info]
+			<li>
+				<p><a href="${info.url}" target="_blank" title="${info.fullTitleOrTitle}">${info.highlightTitle}</a><p>
+				<p style="padding-left:50px;">${info.highlightText}</p>				
+			</li>
+			[/#list]
+			</ul>
+			<div style="padding:20px;">
+				[#include 'page.html'/]
+			</div>
+			[/@InfoFulltextPage]
+		</div>
+	</div>
+	<div style="clear:both;"></div>	
+	<div>用时 ${processed()} 秒</div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

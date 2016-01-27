@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jspxcms投票_${Param.q!?html}_${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：<a href="${ctx}/"></a> > 投票
+</div>
+<p><a href="${ctx}/vote.jspx?id=${vote.id}" target="_blank">${vote.title?html}</a></p>
+<form action="${ctx}/vote.jspx" method="post">
+<input type="hidden" name="id" value="${vote.id}"/>
+<ul>
+[#list vote.options as option]
+<li><input type="checkbox" name="optionIds" value="${option.id}"/> ${option.title}</li>
+[/#list]
+</ul>
+<input type="hidden" name="responseType" value="http"/>
+<input type="hidden" name="status_560" value="您已经投过票了"/>
+<input type="hidden" name="redirectUrl" value="${ctx}/vote/{id}.jspx"/>
+<input type="submit" value="提交"/>
+<a href="${ctx}/vote/${vote.id}.jspx" target="_blank">查看结果</a>
+</form>
+[#include 'inc_footer.html'/]
+</body>
+</html>

@@ -1,0 +1,60 @@
+[#escape x as (x)!?html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>简历投递 -- Powerd by Jspxcms</title>
+<script type="text/javascript" src="${fore}/jquery.js"></script>
+<script type="text/javascript" src="${fore}/jquery.validation_zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/vendor/My97DatePicker/cn_WdatePicker.js"></script>
+<style type="text/css">
+label.error {color:red;font-style:italic;}
+em.required {color:red;font-style:normal;}
+</style>
+<script type="text/javascript">
+$(function() {
+	$("#validForm").validate();
+});
+</script>
+</head>
+<body>
+<h1>简历列表</h1>
+<table border="1">
+	<tr><th>投递日期</th><th>职位</th><th>姓名</th><th>性别</th><th>出生年月</th><th>手机</th></tr>
+	[@ResumeList;resumes]
+	[#list resumes as resume]
+	<tr>
+		<td>${(resume.creationDate?string('yyyy-MM-dd HH:mm'))!}</td>
+		<td>${resume.post?html}</td>
+		<td>${resume.name?html}</td>
+		<td>[#if resume.gender=='M']男[#else]女[/#if]</td>
+		<td>${(resume.birthDate?string('yyyy-MM-dd'))!}</td>
+		<td>${resume.mobile!?html}</td>
+	</tr>
+	[/#list]
+	[/@ResumeList]
+</table>
+<h1>简历投递</h1>
+<form id="validForm" action="${ctx}/resume.jspx" method="post">
+	<p>*职位：
+	 <select name="post">
+     <option[#if Param.post! =='Java开发工程师'] selected[/#if]>Java开发工程师</option>
+     <option[#if Param.post! =='网页设计师'] selected[/#if]>网页设计师</option>
+	 </select>
+	</p>
+	<p>*姓名：<input type="text" name="name" class="required" maxlength="100"/></p>
+	<p>*性别：<label><input type="radio" name="gender" value="M" checked="checked"/>男</label><input type="radio" name="gender" value="F"/>女</label></p>
+	<p>出生年月：<input type="text" name="birthDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"/></p>
+	<p>手机：<input type="text" name="mobile" maxlength="100"/></p>
+	<p>邮箱：<input type="text" name="email" class="email" maxlength="100"/></p>
+	<p>期望薪水：<input type="text" name="expectedSalary" class="digits" maxlength="9"/></p>
+	<p>教育经历：<textarea name="educationExperience" style="width:500px;height:100px;"></textarea></p>
+	<p>工作经历：<textarea name="workExperience" style="width:500px;height:100px;"></textarea></p>
+	<p>备注：<textarea name="remark" style="width:500px;height:100px;"></textarea></p>
+	<input type="hidden" name="nextUrl" value="${url}"/>
+	<input type="hidden" name="status_0" value="投递简历成功"/>
+	<p><input type="submit" value="提交"/></p>
+</form>
+</body>
+</html>
+[/#escape]

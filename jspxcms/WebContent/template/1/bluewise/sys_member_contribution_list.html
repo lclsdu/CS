@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+  <div style="width:30%;float:left;">
+    [#include 'inc_my_left.html'/]
+  </div>
+  <div style="width:65%;float:right;">
+  [@InfoPage userId=user.id pageSize='10' status='1,A,B,C,D' sort='publishDate desc';pagedList]
+  <table border="1">
+    [#list pagedList.content as info]
+    <tr>
+      <td>${info.id}</td>
+      <td>${info.title}</td>
+      <td>[@s.message code='info.status.${info.status}'/]</td>
+      <td>
+        [#if info.status == 'B' || info.status == 'C' || info.status == 'D']
+        <a href="${ctx}/my/contribution/update/${info.id}.jspx">修改</a>
+        <a href="${ctx}/my/contribution/delete.jspx?ids=${info.id}&nextUrl=${ctx}/my/contribution.jspx">删除</a>
+        [#else]
+        <span style="background-color:#ccc">修改</span>
+        <span style="background-color:#ccc">删除</span>
+        [/#if]
+      </td>
+    </tr>
+    [/#list]
+  </table>
+  [#include "page.html"/]
+  [/@InfoPage]
+  </div>
+  <div class="clear"></div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

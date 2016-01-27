@@ -2,15 +2,20 @@ package com.nfc.reader;
 
 import java.io.InputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
+
+import com.nf.reader.utils.CrashHandler;
+import com.nf.reader.utils.MySharedPreferences;
+
 import android.app.Application;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 public final class MyApplication extends Application implements UncaughtExceptionHandler {
 	private static MyApplication instance;
-
+	 public static  MySharedPreferences perf=null;
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {
 		System.exit(0);
@@ -23,8 +28,15 @@ public final class MyApplication extends Application implements UncaughtExceptio
 		Thread.setDefaultUncaughtExceptionHandler(this);
 
 		instance = this;
+	     /**
+		 * 初始化异常cash的接管类
+		 */
+		CrashHandler crashHandler = CrashHandler.getInstance();  
+		crashHandler.init(getApplicationContext()); 
 	}
-
+	public static synchronized MyApplication getInstance(){
+		return instance;
+	}
 	public static String name() {
 		return getStringResource(R.string.app_name);
 	}
@@ -36,7 +48,15 @@ public final class MyApplication extends Application implements UncaughtExceptio
 			return "1.0";
 		}
 	}
-
+	/**
+	 * shareperfacne
+	 */
+	public MySharedPreferences getMySharePerferences(){
+		if(perf==null){
+			  perf=new MySharedPreferences(this);	
+		}
+		return perf;
+	}
 	public static void showMessage(int fmt, CharSequence... msgs) {
 		//使用本地系统对象格式化字符串
 		String msg = String.format(getStringResource(fmt), msgs);

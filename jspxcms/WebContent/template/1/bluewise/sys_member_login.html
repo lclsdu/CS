@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录 -- Powerd by Jspxcms</title>
+<script type="text/javascript" src="${fore}/jquery.js"></script>
+<script type="text/javascript" src="${ctx}/commons/scripts/bluewise.js"></script>
+<script type="text/javascript" src="${fore}/fore.js"></script>
+<script type="text/javascript">
+$(function() {
+	$("#validForm").validate();
+	$("#username").focus().select();
+});
+[#if shiroLoginFailure??]
+	[#if shiroLoginFailure=="com.jspxcms.common.security.IncorrectCaptchaException"]
+	  alert("[@s.message code='incorrectCaptchaError'/]");
+	[#elseif shiroLoginFailure=="com.jspxcms.common.security.CaptchaRequiredException"]
+	  //do nothing
+	[#else]
+	  alert("[@s.message code='usernameOrPasswordError'/]");
+	[/#if]
+[/#if]
+</script>
+</head>
+<body>
+<h1>登录</h1>
+<form id="validForm" action="${ctx}/login.jspx" method="post">
+	<p class="input_p">
+		<label for="username">用户名: </label>
+		<input type="text" id="username" name="username" value="${username!}" class="required"/>
+	</p>
+	<p class="input_p">
+		<label for="password">密码：</label>
+		<input type="password" id="password" name="password"/>
+	</p>
+	[#if Session.shiroCaptchaRequired??]
+	<p class="input_p">
+		<label for="captcha" class="label">验证码:</label>
+		<input type="text" id="captcha" name="captcha" class="input required"/>
+		<div class="clear"></div>
+	</p>
+	<p class="input_p">
+		<label for="captcha" class="label">&nbsp;</label>
+		<img src="${ctx}/captcha.servlet" onclick="this.src='${ctx}/captcha.servlet?d='+new Date()*1" style="cursor:pointer;border:1px solid #ccc;" title="点击重新获取验证码"/>
+		<div class="clear"></div>
+	</p>		
+	[/#if]
+	<input type="hidden" name="fallbackUrl" value="${fallbackUrl!?html}"/>
+	<input type="submit" value="提交"/>
+</form>
+
+</body>
+</html>

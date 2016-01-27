@@ -1,0 +1,13 @@
+[#assign script]
+[#escape x as (x)!?html]
+	[#if user??]
+	<span class="c666">${user.username}</span>,您好 
+	<a class="topa ml5" href="${ctx}/space/${user.id}.jspx">我的空间</a>
+	| <a class="topa" href="${ctx}/my.jspx">设置</a>
+	| <a class="topa" href="${ctx}/logout.jspx">退出</a>
+	[#else]
+	当前访客身份：游客 [ <a class="topa" href="${ctx}/login.jspx?fallbackUrl=${Param.fallbackUrl?url}">登录</a> | <a class="topa"  href="${ctx}/register.jspx">注册</a> ]
+[/#if]
+[/#escape]
+[/#assign]
+document.write("${script?js_string}");

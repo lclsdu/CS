@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	<div style="width:30%;float:left;">
+		[#include 'inc_my_left.html'/]
+	</div>	
+	<div style="width:65%;float:right;">
+		<form action="${ctx}/my/profile.jspx" method="post">
+			<input type="hidden" name="nextUrl" value="${ctx}/my.jspx"/>
+			<table width="100%" cellpadding="0" cellspacing="0" background="0">
+		    <tr><td><span>性别</span></td><td><input type="radio" name="gender" value="M" [#if user.gender?? && user.gender=='M'] checked="checked"[/#if]/>男&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="F" [#if user.gender?? && user.gender=='F'] checked="checked"[/#if]/>女&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="" [#if !user.gender??] checked="checked"[/#if]/>保密</td></tr>
+		    <tr><td><span>生日</span></td><td><input type="text" name="birthDate" value="${(user.birthDate?string('yyyy-MM-dd'))!}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"/></td></tr>
+		    <tr><td><span>自我介绍</span></td><td><textarea name="bio" maxlength="255">${user.bio!}</textarea></td></tr>
+		    <tr><td><span>来自哪里</span></td><td><input type="text" name="comeFrom" maxlength="100" value="${user.comeFrom!}"/></td></tr>
+		    <tr><td><span>QQ</span></td><td><input type="text" name="qq" maxlength="20" value="${user.qq!}"/></td></tr>
+		    <tr><td colspan="2" style="padding-left:230px;"><input type="submit" value="修改"/></td></tr>
+		  </table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

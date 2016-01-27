@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>错误信息 -- Powerd by Jspxcms</title>
+[#include 'inc_head.html'/]
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<ul>
+	[#if .data_model['status_${status}']??]
+		<li>${.data_model['status_${status}']?html}</li>
+	[#elseif messages?? && messages?size>0]
+		[#list messages as m]
+		<li>${m}</li>
+		[/#list]
+	[#else]
+		<li>操作成功</li>
+	[/#if]
+</ul>
+<p><a href="javascript:history.go(-1);">返回</a></p>
+</body>
+</html>

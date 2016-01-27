@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="input type="text"/html; charset=utf-8" />
+<!-- <title>Jspxcms留言板_${Param.q!?html}_${site.fullNameOrName}</title> -->
+<!-- [#include 'inc_head.html'/] -->
+<link type="input type="text"/css" rel="stylesheet" href="_files/global.css"/>
+<script language="javascript" type="text/javascript" src="${fore}/jquery.js" ></script>
+<script language="javascript" type="text/javascript" src="${fore}/bluewise.js" ></script>
+<script language="javascript" type="text/javascript" src="${fore}/fore.js" ></script>
+<script type="text/javascript" src="${fore}/jquery.validation_zh_CN.js"></script>
+<script>
+$(function() {
+	$("#validForm").validate({
+		submitHandler: function(form) {
+			$(form).ajaxSubmit({
+				success: function(data) {
+					if(data.status==0){
+						alert("留言成功！");
+						location.href=location.href;
+					} else if(data.status==0) {
+						alert("留言成功，请等待管理员审核！");					
+					} else if(data.status==100) {
+						alert("验证码输入错误，请重新输入！");
+					} else {
+						alert(data.messages);					
+					}
+				},
+				dataType: 'json'
+			});
+		}
+	});
+});
+</script>
+</head>
+<body>
+	[#assign conf = site.getConf('com.jspxcms.ext.domain.SiteGuestbook')/]
+	<div>
+		[@GuestbookPage pageSize='5';pagedList]
+			[#list pagedList.content as guest]
+			<p>
+				<b>${guest.creator.username!}</b>123:${guest.title!}<br>
+				<b>[#if guest.replyer??]${guest.replyer.username}</b>回复：${guest.replyText!}&nbsp;&nbsp;${guest.replyDate!}[/#if]
+			<p>
+			[/#list]
+			[#include 'page.html'/]
+		[/@GuestbookPage]
+	</div>
+	<form id="validForm" action="guestbook.jspx" method="post">
+	<input type="hidden" name="status" value="1"/>
+	<input type="hidden" name="responseType" value="ajax"/>
+	<fieldset>
+		<legend style="font-size:16px;">留言板</legend>
+		<table cellpadding="0" cellspacing="0" border="0">
+		  <tr>
+		    <td width="15%"><em>*</em>类型:</td>
+		    <td width="35%" colspan="3">
+		    	<select name="typeId">
+		    	[@GuestbookTypeList;list]
+				  [#list list as type]  
+				  <option value="${type.id}">${type.name}</option>
+			 	  [/#list]
+				[/@GuestbookTypeList]
+		    	</select>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td width="15%">标题:</td>
+		    <td width="85%" colspan="3"><input type="text" name="title" style="width:500px;"/></td>
+		  </tr>
+		  <tr>
+		    <td width="15%">留言内容:</td>
+		    <td width="85%" colspan="3"><textarea name="text" maxlength="${conf.maxLength}" style="width:500px;height:80px;"></textarea></td>
+		  </tr>
+		  <tr >
+		  	<td>验证码</td>
+		  	<td colspan="3"><input type="text" id="captcha" name="captcha"/>
+                <span class="autherimg">
+                <img id="auther" src="javascript:false;"  width="120" height="30" 
+                onclick="this.src='${ctx}/captcha.servlet?d='+new Date()*1"/>
+                <a id="nextone" style="cursor:pointer;">看不清，换一张</a>
+                </span>
+            </td>
+          </tr>
+		  <tr>
+		    <td colspan="4">
+		      <div><input type="submit" value="提交"/></div>
+		    </td>
+		  </tr>
+		</table>
+	</fieldset>
+  </form>
+</body>
+</html>

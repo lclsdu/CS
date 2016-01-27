@@ -26,7 +26,8 @@ public final class SpecConf {
 		OLIMIT(R.string.spec_prop_olimit),				//透支上限
 		TRANSLOG(R.string.spec_prop_translog),	//交易日志
 		ACCESS(R.string.spec_prop_access),			//访问受限
-		EXCEPTION(R.string.spec_prop_exception);//异常信息
+		EXCEPTION(R.string.spec_prop_exception),//异常信息
+		APPSERIAL(R.string.app_serial);//应用序列号
 
 		public String toString() {
 			return MyApplication.getStringResource(resId);

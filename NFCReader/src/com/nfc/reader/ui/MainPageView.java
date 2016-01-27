@@ -12,7 +12,7 @@ public final class MainPageView {
 
 	public static CharSequence getContent(Activity activity) {
 
-		final NfcAdapter nfc = NfcAdapter.getDefaultAdapter(activity);
+		final NfcAdapter  nfc = NfcAdapter.getDefaultAdapter(activity);
 		final int resid;
 
 		if (nfc == null)

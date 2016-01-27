@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"
+	default-lazy-init="true">
+
+	<context:annotation-config/>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="com.jspxcms.common.web.BindingInitializer"/>
+		</property>
+	</bean>
+  
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+  </bean>
+ 
+	<mvc:annotation-driven />
+	<mvc:interceptors>
+		<bean class="com.jspxcms.core.support.ForeInterceptor"/>
+	</mvc:interceptors>	
+
+	<bean id="viewResolver" class="com.jspxcms.common.freemarker.FreeMarkerViewResolver">
+		<property name="contentType" value="text/html; charset=UTF-8"/>
+		<property name="cacheUnresolved" value="false"/>
+		<!--通过设置viewResolver的redirectHttp10Compatible属性 为false，关闭了对http1.0协议的兼容支持，
+		程序的redirect响应码则变为了303，之后的重定向请求则维持了一致的https协议。  -->
+    <property name="redirectHttp10Compatible" value="false"/>
+	</bean>
+</beans>

@@ -1,0 +1,8 @@
+[#assign script]
+[#escape x as (x)!?html]
+[#list slot.ads as ad]
+<a href="${ad.url}" target="_blank">${ad.text}</a>
+[/#list]
+[/#escape]
+[/#assign]
+document.write("${script?js_string}");

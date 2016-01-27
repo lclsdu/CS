@@ -1,0 +1,21 @@
+[#escape x as (x)!?html]
+	[#if global.customs['oauth']! == '1']
+		<div class="c-666 fs12" style="border-top:1px dashed #ccc;padding-top:8px;margin-top:10px;">或者您也可以用以下网站账号登录</div>
+		<div style="margin-top:8px;">
+			<a href="${ctx}/support_genuine.jsp"><img src="_files/img/oauth_qq_7.png"/></a>
+			<a href="${ctx}/support_genuine.jsp" class="ml10"><img src="_files/img/oauth_weibo_240.png"/></a>
+		</div>
+	[#elseif global.customs['oauth']! == '2']
+		<div class="c-666 fs12" style="border-top:1px dashed #ccc;padding-top:8px;margin-top:10px;">或者您也可以用以下网站账号登录</div>
+		<div style="margin-top:8px;">
+			<a href="javascript:alert('请先设置好第三方平台APP_ID	和APP_KEY，再开启第三方登录');"><img src="_files/img/oauth_qq_7.png"/></a>
+			<a href="javascript:alert('请先设置好第三方平台CLIENT_ID	和CLIENT_SERCRET，再开启第三方登录');" class="ml10"><img src="_files/img/oauth_weibo_240.png"/></a>
+		</div>
+	[#elseif global.customs['oauth']! == '3']
+		<div class="c-666 fs12" style="border-top:1px dashed #ccc;padding-top:8px;margin-top:10px;">或者您也可以用以下网站账号登录</div>
+		<div style="margin-top:8px;">
+			<a href="${ctx}/oauth/qq_login.jspx?fallbackUrl=${Param.fallbackUrl?url}"><img src="_files/img/oauth_qq_7.png"/></a>
+			<a href="${ctx}/oauth/weibo_login.jspx?fallbackUrl=${Param.fallbackUrl?url}" class="ml10"><img src="_files/img/oauth_weibo_240.png"/></a>
+		</div>
+	[/#if]
+[/#escape]

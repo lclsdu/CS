@@ -1,0 +1,61 @@
+[#escape x as (x)!?html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${title}_${node.name}_${site.fullNameOrName}</title>
+<meta name="keywords" content="${info.keywords}"/>
+<meta name="description" content="${info.description}"/>
+[#include 'inc_head.html'/]
+
+<script type="text/javascript" src="${ctx}/static/vendor/flexpaper/js/flexpaper.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/flexpaper/js/flexpaper_handlers.js"></script>
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<script type="text/javascript">
+$(function() {
+	$("#captcha").captcha("${ctx}/captcha.servlet",{title:"点击重新获取验证码"});
+});
+</script>
+<style type="css/text">
+.flexpaper_viewer {height: 100%;width: 100%; background-image: -ms-linear-gradient(top, #AAB3B3 0%, #D4DCDC 100%);background-image: -moz-linear-gradient(top, #AAB3B3 0%, #D4DCDC 100%);background-image: -o-linear-gradient(top, #AAB3B3 0%, #D4DCDC 100%);background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #AAB3B3), color-stop(1, #D4DCDC));background-image: -webkit-linear-gradient(top, #AAB3B3 0%, #D4DCDC 100%);background-image: linear-gradient(top, #AAB3B3 0%, #D4DCDC 100%); }
+</style>
+</head>
+<body>
+		  <h1 class="title">${info.fullTitleOrTitle}</h1>12
+		  <div id="docViewer" style="width:770px;height:700px"></div>
+		  
+<script type="text/javascript">
+    $('#docViewer').FlexPaperViewer(
+            { config : {
+                jsDirectory : '${ctx}/static/vendor/flexpaper/js/',
+                SWFFile : '${info.docSwf}',
+
+                Scale : 1,
+                ZoomTransition : 'easeOut',
+                ZoomTime : 0.5,
+                ZoomInterval : 0.2,
+                FitPageOnLoad : true,
+                FitWidthOnLoad : false,
+                FullScreenAsMaxWindow : false,
+                ProgressiveLoading : true,
+                MinZoomSize : 0.2,
+                MaxZoomSize : 5,
+                SearchMatchAll : false,
+                InitViewMode : 'Portrait',
+                RenderingOrder : 'flash',
+                StartAtPage : '',
+
+                ViewModeToolsVisible : true,
+                ZoomToolsVisible : true,
+                NavToolsVisible : true,
+                CursorToolsVisible : true,
+                SearchToolsVisible : true,
+                WMode : 'window',
+                localeChain: 'zh_CN'
+                //localeChain: 'en_US'
+            }}
+    );
+</script>
+</body>
+</html>
+[/#escape]

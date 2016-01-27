@@ -1,0 +1,244 @@
+[#escape x as (x)!?html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>${site.fullNameOrName}</title>
+<meta name="keywords" content="${node.keywords}"/>
+<meta name="description" content="${node.description}"/>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<body>
+[#include 'inc_header.html'/]
+[@TagList nodeId='45';list]
+[#list list as tag]
+${tag.name}
+[/#list]
+[/@TagList]
+
+				[@Question;question]
+				[#if question??]
+				<form action="${ctx}/questions/${question.id}/answer.jspx" method="post" id="questionForm">
+					<div class="text-center" style="padding:5px 10px;"><a class="c-infoem fs14 a-hover" href="${ctx}/questions/${question.id}.jspx" target="_blank">${question.title}</a></div>
+					[#list question.items as item]
+					<div class="text-center" style="padding:5px 10px;"><a class="c-infoem fs14 a-hover" href="${ctx}/questions/${question.id}.jspx" target="_blank">${item.title}</a></div>
+					<ul class="list-unstyled">
+						[#list item.options as option]
+						<li style="padding:5px 0;"><label><input type="radio" name="optionIds" value="${option.id}"/> ${option.title}</label></li>
+						[/#list]
+					</ul>
+					[/#list]
+					<input type="hidden" name="status_504" value="您已经参与过调查"/>
+					<input type="hidden" name="redirectUrl" value="${ctx}/questions/${question.id}/result.jspx"/>
+					<div class="text-center" style="padding:10px 0 20px 0;">
+						<input type="submit" value="提交"/> &nbsp;
+						<a class="a fs14" href="${ctx}/questions/${question.id}/result.jspx" target="_blank">查看结果</a>
+					</div>
+				</form>
+				[#else]
+				<div>没有投票</div>
+				[/#if]
+				[/@Question]
+
+
+[#--
+[@AdList slotId='14';list]
+[#list list as ad]
+${ad.name}
+[/#list]
+[/@AdList]
+<script type="text/javascript" src="${ctx}/dd/2.jspx"></script>
+<div>
+[@Query sql="select t.f_user_id,t.f_username from cms_user t";list]
+  [#list list as bean]
+    ${bean[0]},${bean[1]}[#if bean_has_next];[/#if]
+  [/#list]
+[/@Query]
+</div>
+<div class="center">
+
+	[@Info id='31';info]
+	<p>标题：<a href="${info.url}">${info.title}</a></p>
+	<p>下载文件：<a href="${ctx}/info_download.jspx?id=${info.id}">${info.fileName}</a></p>
+	<p>文件大小：${info.fileSize}</p>
+	<p>下载次数：<span id="info_downloads"></span>
+		<script type="text/javascript">$("#info_downloads").load("${ctx}/info_downloads/${info.id}.jspx?d="+new Date()*1);</script>
+	</p>
+	[/@Info]
+</div>
+<div class="center">
+	<div class="block">
+		<h1>按节点编码(ID)取节点</h1>
+		<h6><a href="${getNode('news').url}">${getNode('news').name}</a></h6>
+		<h6><a href="${getNode(48).url}">${getNode(48).name}</a></h6>
+		<h6>[@Node number='news';bean]<a href="${bean.url}">${bean.name}</a>[/@Node]</h6>
+		<h6>[@Node id='48';bean]<a href="${bean.url}">${bean.name}</a>[/@Node]</h6>
+	</div>
+	<div class="block">
+		<h1>按节点编码取信息</h1>
+		<ul>
+			[@InfoList node='news';list]
+			[#list list as info]
+			<li><a href="${info.url}">${substring(info.title,15,'...')}</a></li>
+			[/#list]
+			[/@InfoList]
+		</ul>
+	</div>
+	<div class="block">
+		<h1>按节点ID取信息</h1>
+		<ul>
+			[@InfoList nodeId=48;list]
+			[#list list as info]
+			<li><a href="${info.url}">${substring(info.title,15,'...')}</a></li>
+			[/#list]
+			[/@InfoList]
+		</ul>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div class="center">
+	<h2>循环取一级有信息的节点</h2>
+	[@NodeList isRealNode='true';list]
+	[#list list as node]
+	<div class="block">
+		<h6><a href="${node.url}">${node.name}</a></h6>
+		<ul>
+			[@InfoList nodeId=node.id isIncludeChildren='true' limit='4';list]
+			[#list list as info]
+			<li><a href="${info.url}">${substring(info.title,15,'...')}</a></li>
+			[/#list]
+			[/@InfoList]
+		</ul>
+	</div>
+	[/#list]
+	[/@NodeList]
+	<div style="clear:both;"></div>	
+</div>
+
+--]
+<div class="center">
+
+  <div class="block">
+    <h2>最新资讯</h2>
+    <ul>
+    [@InfoList p1=Param.p1 limit='6';list]
+    [#list list as info]
+    <li>[@A bean=info length="20" append="..." target="_blank"/]</li>
+    [/#list]
+    [/@InfoList]
+    </ul>
+  </div>
+  <div class="block">
+    <h2>本月热点</h2>
+    <ul>
+    [@InfoList beginDate="now,month-1" sort='views desc' limit='6';list]
+    [#list list as info]
+    <li>[@A bean=info length="20" append="..." target="_blank"/]</li>
+    [/#list]
+    [/@InfoList]
+    </ul>
+  </div>
+
+	<div class="block">
+		<h2>文档（除常见问题）</h2>
+	  <ul>
+	  [@InfoList node='documentation' excludeNode='faq' isIncludeChildren='true' limit='4' sort='downloads desc';list]
+	  [#list list as info]
+	  <li>[@A bean=info length="20" append="..." target="_blank"/]</li>
+	  [/#list]
+	  [/@InfoList]
+	  </ul>
+	</div>
+	<div style="clear:both;"></div>	
+</div>
+
+<div class="center">
+	<h2>图文列表</h2>
+  [@InfoList isWithImage='true' limit='6';list]
+  [#list list as info]
+	<div class="block">
+	  <div>[@Img bean=info.smallImageBean/]</div>
+	  <div>[@A bean=info length="10" append="..." target="_blank"/]</div>
+	</div>
+	[/#list]
+  [/@InfoList]
+	<div style="clear:both;"></div>	
+</div>
+
+<div class="center">
+  <h2>头条</h2>
+  <ul>
+  [@InfoList attr='head' limit='3';list]
+  [#list list as info]
+	<div class="block">
+	  <div>[@Img bean=info.attrImageBean/]</div>
+	  <div><a href="${info.url}">${substring(info.title,10,'...')}</a></div>
+	</div>
+  [/#list]
+  [/@InfoList]
+  </ul>
+	<div style="clear:both;"></div>	
+</div>
+
+<div class="center">
+  <h2>友情链接类型</h2>
+  <ul>
+  [@FriendlinkTypeList;ftft]
+  [#list ftft as sss]  
+	<div class="block">
+	  <div>${sss.name}</div>
+	</div>
+  [/#list]
+  [/@FriendlinkTypeList]
+  </ul>
+	<div style="clear:both;"></div>	
+</div>
+<div class="center">
+  <h2><a href="${ctx}/guestbook.jspx">留言板</a></h2>
+	<div style="clear:both;"></div>	
+</div>
+<div class="center">
+  <h2>友情链接</h2>
+  <ul>
+  [@FriendlinkList type='zonghe,yule' ;list]
+  [#list list as link]  
+	<div class="block">
+	  <div><a href="${link.url}">[#if link.logo??]<img src="${link.logo!}" alt="${link.name}" border="0"/>[#else]${link.name?html}[/#if]</a></div>
+	</div>
+  [/#list]
+  [/@FriendlinkList]
+  </ul>
+	<div style="clear:both;"></div>	
+</div>
+<div>
+[@Vote;vote]
+[#if vote??]
+<p><a href="${ctx}/vote.jspx?id=${vote.id}" target="_blank">${vote.title?html}</a></p>
+<form action="${ctx}/vote.jspx" method="post">
+<input type="hidden" name="id" value="${vote.id}"/>
+<ul>
+[#list vote.options as option]
+<li><input type="checkbox" name="optionIds" value="${option.id}"/> ${option.title}</li>
+[/#list]
+</ul>
+</form>
+[#else]
+<p>没有投票</p>
+[/#if]
+[/@Vote]
+</div>
+<div>
+[#--
+[@ScoreGroup;sg]
+${sg.name}
+[#list sg.items as item]
+${item.name}
+[/#list]
+[/@ScoreGroup]
+--]
+</div>
+<div class="center"><span id="node_views"></span><script type="text/javascript">$("#node_views").load("${ctx}/node_views/${node.id}.jspx?d="+new Date()*1);</script></div>
+[#include 'inc_footer.html'/]
+</body>
+</html>
+[/#escape]

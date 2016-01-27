@@ -104,12 +104,18 @@ public final class HtmlFormatter {
 		spliter(out);
 		newline(out);
 		
+
 		{
 			SpecConf.PROP prop = SpecConf.PROP.SERIAL;
 			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
 				newline(out);
 		}
-
+		//卡應用序列號
+		{
+			SpecConf.PROP prop = SpecConf.PROP.APPSERIAL;
+			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))
+				newline(out);
+		}
 		{
 			SpecConf.PROP prop = SpecConf.PROP.PARAM;
 			if (formatProperty(out, SpecConf.TAG_LAB, prop, app.getStringProperty(prop)))

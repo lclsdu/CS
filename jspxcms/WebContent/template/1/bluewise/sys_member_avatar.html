@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${site.fullNameOrName}</title>
+[#include 'inc_head.html'/]
+<link href="_files/global.css" rel="stylesheet"/>
+<link href="${ctx}/static/vendor/swfupload/process.css" rel="stylesheet"/>
+<link href="${ctx}/static/vendor/imgareaselect/css/imgareaselect-animated.css" rel="stylesheet"/>
+<script src="${ctx}/static/vendor/swfupload/swfupload.js"></script>
+<script src="${ctx}/static/vendor/swfupload/swfupload.queue.js"></script>
+<script src="${ctx}/static/vendor/swfupload/fileprogress.js"></script>
+<script src="${ctx}/static/vendor/swfupload/handlers.js"></script>
+<script src="${ctx}/static/vendor/imgareaselect/scripts/jquery.imgareaselect.js"></script>
+<script>
+$(function(){
+	var settings = {
+		upload_url: "${ctx}/my/avatar_upload.jspx;jsessionid="+$.cookie("JSESSIONID"),
+		file_size_limit: "1024 KB",
+		file_types: "*.jpg;*.jpeg;*.png;*.gif",
+		file_types_description : "Images",
+		file_post_name: "file",
+		
+		flash_url: "${ctx}/static/vendor/swfupload/swfupload.swf",
+		flash9_url: "${ctx}/static/vendor/swfupload/swfupload_fp9.swf",
+		file_upload_limit : 0,
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "avatarSwfProgress",
+			cancelButtonId : "avatarSwfCancel"
+		},
+		
+		debug: false,
+		
+		button_cursor: SWFUpload.CURSOR.HAND,
+		button_width: "67",
+		button_height: "25",
+		button_placeholder_id: "avatarSwfButton",
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_action: SWFUpload.BUTTON_ACTION.SELECT_FILE,
+		
+		// The event handler functions are defined in handlers.js
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_complete_handler : uploadComplete,
+		upload_success_handler : function(file, serverData) {
+			doUploadSuccess(file,serverData,this);
+			var data = $.parseJSON(serverData);
+			fileUrl = data.fileUrl;
+			imgSelectInit();
+		}
+	};
+	var avatarSwfUpload = new SWFUpload(settings);
+	var container = 500;
+	var fileUrl = null;
+	var srcWidth = null;
+	var srcHeight = null;
+	var scale = 1;
+	function imgSelectInit() {
+		var imgHtml="<img id='avatarImgSrc' src='"+fileUrl+"?d="+new Date()*1+"' style='position:absolute;top:-99999px;left:-99999px'/>";
+		$(imgHtml).appendTo(document.body).load(function() {
+			srcWidth=this.width;
+			srcHeight=this.height;
+		  if(srcWidth>container || srcHeight>container) {
+		    scale = container/srcWidth < container/srcHeight ? container/srcWidth : container/srcHeight;
+		  }
+			setImgAreaSelect();
+			$(this).remove();
+		});
+	}
+	function onSelectChange(img, selection) {
+		//selection.width,selection.height,selection.x1,selection.x2,selection.y1,selection.y2
+	  if (!selection.width || !selection.height) {
+	    return;
+	  }
+		//Math.round()
+		$("#left").val(Math.round(selection.x1/scale));
+		$("#top").val(Math.round(selection.y1/scale));
+		$("#width").val(Math.round(selection.width/scale));
+		$("#height").val(Math.round(selection.height/scale));
+	}
+	function setImgAreaSelect() {
+		$("#avatarImg").imgAreaSelect({remove:true}).remove();
+		$("#avatarDiv").empty().hide();
+		$("<img id='avatarImg' style='max-height:500px;max-width:500px;'/>").click(function() {
+			this.src=fileUrl+'?d='+new Date()*1;
+		}).appendTo("#avatarDiv");
+		$("#avatarImg").attr("src",fileUrl+"?d="+new Date()*1);
+		var ms = ${avatarLarge}*scale;
+		$("#avatarImg").imgAreaSelect({aspectRatio: "1:1", minWidth: ms, minHeight: ms,x1:0, y1:0, x2:ms, y2:ms, handles: true, onSelectChange: onSelectChange});
+		$("#avatarDiv").show();
+	}
+});
+</script>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	<div style="width:30%;float:left;">
+		[#include 'inc_my_left.html'/]
+	</div>
+	<div style="width:65%;float:right;">
+	
+		[#--
+		<form action="${ctx}/my/avatar_upload.jspx" method="post" enctype="multipart/form-data">
+			<input type="file" name="file"/>
+			<input type="submit" value="提交"/>
+		</form>
+		<script>
+		var fileUrl = [#if fileUrl??]"${fileUrl}"[#else]null[/#if];
+		</script>
+		<div><img id="avatarImg"[#if fileUrl??] src="${fileUrl}?${.now?long}"[/#if] onclick="this.src=fileUrl+'?d='+new Date()*1;" style="max-height:500px;max-width:500px;"/></div>
+		--]
+		
+		<div style="padding-bottom:60px;">
+			<div style="float:left;width:50%;">
+				<span id="avatarSwfButton"></span><input type="button" value="上传" class="swfbutton"/> &nbsp;
+				<input id="avatarSwfCancel" type="button" value="取消" onclick="avatarSwfUpload.cancelQueue();" disabled="disabled"/>			
+			</div>
+			<div style="float:right;width:50%;position:relative;">
+				<div id="avatarSwfProgress" style="position:absolute;"></div>			
+			</div>
+		</div>
+		<div id="avatarDiv">
+		</div>
+		<form action="${ctx}/my/avatar.jspx" method="post">		
+			<input type="hidden" name="nextUrl" value="${ctx}/my.jspx"/>
+			<input type="text" id="top" name="top" value=""/>
+			<input type="text" id="left" name="left" value=""/>
+			<input type="text" id="width" name="width" value=""/>
+			<input type="text" id="height" name="height" value=""/>
+			<input type="submit" value="提交"/>			
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>

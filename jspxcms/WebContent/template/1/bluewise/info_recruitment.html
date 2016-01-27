@@ -1,0 +1,99 @@
+[#escape x as (x)!?html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${title}_${node.name}_${site.fullNameOrName}</title>
+<meta name="keywords" content="${info.keywords}"/>
+<meta name="description" content="${info.description}"/>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<script type="text/javascript">
+$(function() {
+	$("#captcha").captcha("${ctx}/captcha.servlet",{title:"点击重新获取验证码"});
+});
+</script>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：[#list node.hierarchy as node]<a href="${node.url}">${node.name}</a> > [/#list] 正文
+</div>
+<script type="text/javascript">$.get("${ctx}/info_views/${info.id}.jspx?d="+new Date()*1);</script>
+<div class="center"><span id="info_views"></span><script type="text/javascript">$("#info_views").load("${ctx}/info_views/${info.id}.jspx?d="+new Date()*1);</script></div>
+
+<div class="center">
+	<div style="float:left;width:200px;border:1px solid #999;">
+		<div style="padding:10px;">
+		[#--
+			<h2>[@Node number='company';n]<a href="${n.url}">${n.name}</a>[/@Node]</h2>
+			<ul>
+			[@NodeList parent='company';list]
+			[#list list as n]
+				<li><a href="${n.url}">${n.name}</a></li>
+			[/#list]
+			[/@NodeList]
+			</ul>
+			--]
+		</div>
+	</div>
+	<div style="float:right;width:735px;border:1px solid #999;">
+		<div style="padding:10px;">
+		  <h1 class="title">${info.title}</h1>
+		  <table width="500">
+        <tr>
+          <td>公司名称：</td>
+          <td>${info.customs['company']}</td>
+          <td>部门名称：</td>
+          <td>${info.customs['dept']}</td>
+        </tr>
+        <tr>
+          <td>职位名称：</td>
+          <td>${info.title}</td>
+          <td>发布时间：</td>
+          <td>${info.publishDate?string('yyyy-MM-dd')}</td>
+        </tr>
+        <tr>
+          <td>招聘人数：</td>
+          <td>${info.customs['number']}</td>
+          <td>薪酬待遇：</td>
+          <td>${info.customs['salary']}</td>
+        </tr>
+        <tr>
+          <td>工作地点</td>
+          <td colspan="3">${info.customs['location']}</td>
+        </tr>
+        <tr>
+          <td>岗位职责</td>
+          <td colspan="3">[#noescape]${bbcode(info.customs['responsibilities'])}[/#noescape]</td>
+        </tr>
+        <tr>
+          <td>岗位要求</td>
+          <td colspan="3">[#noescape]${bbcode(info.customs['qualifications'])}[/#noescape]</td>
+        </tr>
+		  </table>
+		  <div><a href="${ctx}/resume.jspx?post=${info.title?url}">我要应聘</a></div>
+		  <div style="padding:10px 0;">
+			  [@InfoPrev id=info.id; bean]
+			  [#if bean??]
+			  <div>上一篇：<a href="${bean.url}">${bean.title}</a></div>
+			  [#else]
+			  <div>上一篇：没有了</div>
+			  [/#if]
+			  [/@InfoPrev]
+			  [@InfoNext id=info.id; bean]
+			  [#if bean??]
+			  <div>下一篇：<a href="${bean.url}">${bean.title}</a></div>
+			  [#else]
+			  <div>下一篇：没有了</div>
+			  [/#if]
+			  [/@InfoNext]
+		  </div>
+		</div>
+  </div>
+	<div style="clear:both;"></div>	
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>
+[/#escape]

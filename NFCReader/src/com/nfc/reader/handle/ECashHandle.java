@@ -1,9 +1,14 @@
 package com.nfc.reader.handle;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.util.Log;
+
+import com.nf.reader.utils.PBOCECLoad;
+import com.nf.reader.utils.Pboc20Reader;
 import com.nfc.reader.SpecConf;
 import com.nfc.reader.Util;
 import com.nfc.reader.bean.CardApplications;
@@ -32,8 +37,15 @@ final class ECashHandle extends ProtocolAssembler {
 			(short) 0x9F13 /* 联机ATC */, (short) 0x9F36 /* ATC */, (short) 0x9F51 /* 货币代码 */,
 			(short) 0x9F4F /* 日志文件格式 */, (short) 0x9F4D /* 日志文件ID */, (short) 0x5A /* 帐号 */,
 			(short) 0x5F24 /* 失效日期 */, (short) 0x5F25 /* 生效日期 */, (short) 0xDF63 /* 透支数目 */,
-			(short) 0xDF62 /* 透支上限 */, };
-
+			(short) 0xDF62 /* 透支上限 */, (short)0x5F34/*应用序列号*/,};
+   /**
+    * 55域基本信息
+    * 9F26 应用密文；      9F27 密文信息数据 ；
+    * 9F10 发卡行应用数据；9F37 不可预知数；
+    * 9F36 应用交易计数器；95 终端验证结果；9A 交易日期；
+    * 9C 交易类型；9F02 授权金额；5F2A 交易货币代码；82 应用交互特征；
+    * 9F1A 终端国家代码 ；9F03 其它金额；9F33 终端性能
+    */
 	@Override
 	protected SpecConf.APP getApplicationId() {
 		return SpecConf.APP.UNKNOWN;
@@ -50,9 +62,20 @@ final class ECashHandle extends ProtocolAssembler {
 	}
 
 	protected HINT readCard(Iso7816.StdTag tag, Card card) throws IOException {
-
+		
 		final ArrayList<Iso7816.ID> aids = getApplicationIds(tag);
-
+		Pboc20Reader reader=new Pboc20Reader(tag);
+		Map<String, String> beforeMap=null;
+		try {
+			beforeMap=PBOCECLoad.transBerore(reader);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.d("com.nfc.reader", beforeMap.get("9F26").toString());
+		
+		
+		
 		for (Iso7816.ID aid : aids) {
 
 			/*--------------------------------------------------------------*/
@@ -123,6 +146,13 @@ final class ECashHandle extends ProtocolAssembler {
 		prop = parseInteger(tlvs, (short) 0x9F36);
 		if (prop != null)
 			app.setProperty(SpecConf.PROP.COUNT, prop);
+		/**
+		 * 应用序列号
+		 */
+		prop = parseInteger(tlvs, (short) 0x5F34);
+		if (prop != null)
+			Log.d("com.nfc.reader", prop.toString());
+			app.setProperty(SpecConf.PROP.APPSERIAL, prop);
 
 		prop = parseValidity(tlvs, (short) 0x5F25, (short) 0x5F24);
 		if (prop != null)

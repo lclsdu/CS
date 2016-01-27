@@ -2,9 +2,6 @@
 <resources>
 
     <string name="app_name">NFCReader</string>
-    <string name="font_oem1">fonts/oem1.ttf</string>
-    <string name="font_oem2">fonts/oem2.ttf</string>
-    <string name="font_oem3">fonts/oem3.ttf</string>
     <string name="spec_prop_id">Application</string>
     <string name="spec_prop_serial">Serial:\u0020</string>
     <string name="spec_prop_param">Parameter:\u0020</string>
@@ -68,12 +65,10 @@
     ]]>
     </string>
     <string name="info_main_copied">Card information has been copied to clipboard</string>
-    <string name="info_main_about">
+    <string name="info_main_about">  
 <![CDATA[
 	<div><t_head1><app /></t_head1> <version />
 	<br /><t_splitter><br />
 	<br />NFCard can read contactless IC card use NFC hadware.<br />
 	]]>
-    </string>
-
-</resources>
+    </string></resources>

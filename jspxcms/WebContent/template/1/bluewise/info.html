@@ -1,0 +1,190 @@
+[#escape x as (x)!?html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${title}_${node.name}_${site.fullNameOrName}</title>
+<meta name="keywords" content="${info.keywords}"/>
+<meta name="description" content="${info.description}"/>
+[#include 'inc_head.html'/]
+<link type="text/css" rel="stylesheet" href="_files/global.css"/>
+<script type="text/javascript" src="_files/ckplayer/ckplayer.js"></script>
+<script type="text/javascript">
+$(function() {
+	$("#captcha").captcha("${ctx}/captcha.servlet",{title:"点击重新获取验证码"});
+});
+</script>
+</head>
+<body>
+[#include 'inc_header.html'/]
+<div class="center">
+	当前位置：[#list node.hierarchy as node]<a href="${node.url}">${node.name}</a> > [/#list] 正文
+</div>
+<script type="text/javascript">$.get("${ctx}/info_views/${info.id}.jspx?d="+new Date()*1);</script>
+<div class="center"><span id="info_views"></span><script type="text/javascript">$("#info_views").load("${ctx}/info_views/${info.id}.jspx?d="+new Date()*1);</script></div>
+
+<div class="center">
+	<div style="float:left;width:200px;border:1px solid #999;">
+		<div style="padding:10px;">
+		[#--
+			<h2>[@Node number='company';n]<a href="${n.url}">${n.name}</a>[/@Node]</h2>
+			<ul>
+			[@NodeList parent='company';list]
+			[#list list as n]
+				<li><a href="${n.url}">${n.name}</a></li>
+			[/#list]
+			[/@NodeList]
+			</ul>
+			--]
+		</div>
+	</div>
+	<div style="float:right;width:735px;border:1px solid #999;">
+		<div style="padding:10px;">
+		  <h1 class="title">${info.fullTitleOrTitle}</h1>
+		  <div>${info.getCustomsValue('456')} ${info.p1Value}</div>
+		  <div id="a1"></div>
+      <script type="text/javascript">
+      var flashvars={
+        f:'http://demo.jspxcms.com/uploads/1/video/public/201308/20130808022323_wvx3el.flv',
+        c:0
+      };
+      CKobject.embedSWF('http://localhost:8080_files/ckplayer/ckplayer.swf','a1','ckplayer_a1','600','400',flashvars);      
+      </script>
+		  <div class="text">[#noescape]${text}[/#noescape]</div>
+		  [#if info.file??]
+		  <div><a href="${ctx}/info_download.jspx?id=${info.id}" target="_blank">${info.fileName}</a></div>
+		  [/#if]
+		  <div style="padding:10px 0;">
+			  [#include 'page.html'/]
+			</div>			
+			<div>
+			<script type="text/javascript">
+			function digg() {
+				$.post('${ctx}/info_digg.jspx',
+					{id:${info.id}},
+					function(data){
+						if(data!="0") {
+							$('#diggs').text(data);
+						}
+					}
+				);
+			}
+			
+			function bury() {
+				$.post('${ctx}/info_bury.jspx',
+					{id:${info.id}},
+					function(data){
+						if(data!="0") {
+							$('#burys').text(data);
+						}
+					}
+				);
+			}
+			function digg() {
+				$.post('${ctx}/info_digg.jspx',
+					{id:${info.id}},
+					function(data){
+						if(data!="0") {
+							$('#diggs').text(data);
+						}
+					}
+				);
+			}
+			</script>
+			<ul>
+			<li onclick="digg();" style="float:left;padding:3px 10px;cursor:pointer;">顶<span id="diggs"></span></li>
+			<li onclick="bury();" style="float:left;padding:3px 10px;cursor:pointer;">踩<span id="burys"></span></li>
+			<li style="clear:both"><li>
+			</ul>			
+			<script type="text/javascript">
+				$.get("${ctx}/info_diggs/${info.id}.jspx?d="+new Date()*1,function(data) {
+					$("#diggs").text(data[0]);
+					$("#burys").text(data[1]);
+				},"json");
+			</script>
+			</div>
+			<div>
+			<script type="text/javascript">
+			function infoScoring(id,itemId) {
+				$.post('${ctx}/info_scoring.jspx',
+					{id:id,itemId:itemId},
+					function(data) {
+						if(data!="0"){
+							$("#score-item-"+itemId).text(data);
+						}
+					}
+				);
+			}
+			</script>
+			[@ScoreGroup;sgroup]
+			[#if sgroup??]
+			<ul>
+			[#list sgroup.items as item]
+			<li style="float:left;padding:3px 10px;cursor:pointer;" onclick="infoScoring(${info.id},${item.id});">${item.name}<span id="score-item-${item.id}">0</span></li>
+			[/#list]
+			<li style="clear:both"><li>
+			</ul>
+			[/#if]
+			[/@ScoreGroup]
+			</div>
+			<script type="text/javascript">
+				$.get("${ctx}/info_score/${info.id}.jspx?d="+new Date()*1,function(data) {
+					for(var id in data) {
+						$("#score-item-"+id).text(data[id]);
+					}
+				},"json");
+			</script>
+		  <div style="padding:10px 0;">
+			  [@InfoPrev id=info.id; bean]
+			  [#if bean??]
+			  <div>上一篇：<a href="${bean.url}">${bean.title}</a></div>
+			  [#else]
+			  <div>上一篇：没有了</div>
+			  [/#if]
+			  [/@InfoPrev]
+			  [@InfoNext id=info.id; bean]
+			  [#if bean??]
+			  <div>下一篇：<a href="${bean.url}">${bean.title}</a></div>
+			  [#else]
+			  <div>下一篇：没有了</div>
+			  [/#if]
+			  [/@InfoNext]
+		  </div>
+		  <ul style="padding:10px 0;">
+		  <h2>相关阅读</h2>
+		  [@InfoFulltextList q=info.title excludeId=info.id limit='4';list]
+		  [#list list as info]
+		  <li><a href="${info.url}">${info.title}</a></li>
+		  [/#list]
+		  [/@InfoFulltextList]
+		  </ul>
+		  <div style="padding:10px 0;">
+			  <h2>网友评论:</h2>
+			  <p><a href="${ctx}/comment.jspx?fid=${info.id}">共<span id="info_comments"></span>评论。点击查看</a></p>
+			  <script type="text/javascript">$("#info_comments").load("${ctx}/info_comments/${info.id}.jspx?d="+new Date()*1);</script>
+			  <form action="${ctx}/comment_submit.jspx" method="post">
+			  	<input type="hidden" name="ftype" value="Info"/>
+			  	<input type="hidden" name="fid" value="${info.id}"/>
+			  	<p><textarea id="text" name="text" style="width:500px;height:120px;"></textarea></p>
+			  	<script type="text/javascript">
+					//var nEditor = new ubbEditor('text');
+					//nEditor.tLang = 'zh-cn';
+					//nEditor.tInit('nEditor', '${ctx}/vendor/ubbeditor/');
+					</script>
+			  	<p><input type="text" id="captcha" name="captcha"/></p>
+			  	<input type="hidden" name="nextUrl" value="${url}"/>
+			  	<input type="hidden" name="timeout" value="3000"/>
+			  	<input type="hidden" name="status_0" value="评论成功"/>
+			  	<input type="hidden" name="status_1" value="评论成功，等待管理员审核"/>
+			  	<p><input type="submit" value="提交"/></p>
+			  </form>
+			  <div id="comment_div"></div><script type="text/javascript">$("#comment_div").load("${ctx}/comment_list.jspx?fid=${info.id}&d="+new Date()*1);</script>
+			</div>
+		</div>
+  </div>
+	<div style="clear:both;"></div>	
+</div>
+[#include 'inc_footer.html'/]
+</body>
+</html>
+[/#escape]

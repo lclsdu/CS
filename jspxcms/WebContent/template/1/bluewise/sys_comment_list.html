@@ -1,0 +1,10 @@
+<ul>
+[@CommentList fid=Param.fid;list]
+[#list list as comment]
+	<li>
+		<div>${comment.creator.username},${comment.creationDate?string("yyyy-MM-dd")}</div>
+		<p>${bbcode(comment.text)}</p>
+	</li>
+[/#list]
+[/@CommentList]
+</ul>
